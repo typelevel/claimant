@@ -105,4 +105,15 @@ object ClaimTest extends Properties("ClaimTest") {
 
   property("ys.map(_ + 1).subsetOf(ys)") =
     test(Claim(ys.map(_ + 1).subsetOf(ys)), "falsified: Set(2, 3, 4).subsetOf(Set(1, 2, 3))")
+
+  property("xs.min == 2") =
+    test(Claim(xs.min == 2), "falsified: List(1, 2, 3, 4).min {1} == 2")
+
+  property("xs.max == 3") =
+    test(Claim(xs.max == 3), "falsified: List(1, 2, 3, 4).max {4} == 3")
+
+  val (n1, n2, n3) = (0.29622045F, -8.811786E-7F, 1.0369974E-8F)
+
+  property("(n1 + (n2 + n3)) == ((n1 + n2) + n3)") =
+    test(Claim((n1 + (n2 + n3)) == ((n1 + n2) + n3)), "falsified: 0.2962196 == 0.29621956")
 }

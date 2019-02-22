@@ -24,6 +24,10 @@ object Claim {
           q"""${x}.toString + ".compareTo(" + ${y}.toString + ") {" + ${input}.toString + "}""""
         case q"($x).lengthCompare($y)" =>
           q"""${x}.toString + ".lengthCompare(" + ${y}.toString + ") {" + ${input}.toString + "}""""
+        case q"($x).min[$tpe]($o)" =>
+          q"""${x}.toString + ".min {" + ${input}.toString + "}""""
+        case q"($x).max[$tpe]($o)" =>
+          q"""${x}.toString + ".max {" + ${input}.toString + "}""""
         case _ =>
           q"$input.toString"
       })
