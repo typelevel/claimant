@@ -111,6 +111,7 @@ expressions:
  * `contains`, `containsSlice`, and `apply`
  * `isDefinedAt`, `sameElements`, and `subsetOf`
  * `exists` and `forall` (although `Function1` values can't be displayed)
+ * `Equiv#equiv`
 
 The `Claim(_)` macro also recognizes certain kinds of expressions
 which it will attempt to annotate, such as:
@@ -118,6 +119,8 @@ which it will attempt to annotate, such as:
  * `size` and `length`
  * `compare`, `compareTo`, and `lengthCompare`
  * `min` and `max`
+ * `Ordering#compare` and `PartialOrdering#tryCompare`
+ * `Ordering.Implicits.infixOrderingOps`
 
 (For examples of the labels produced by these, see `ClaimTest`.)
 
