@@ -21,8 +21,8 @@ property fails, ScalaCheck will show you this label.
 
 ### Examples
 
-Here's an example of using *Claim* to try to prove that `Float` is
-associative:
+Here's an example of using `Claim(...)` to try to prove that `Float`
+is associative:
 
 ```scala
 package mytest
@@ -62,7 +62,7 @@ also see how much we failed by (around `4e-8` in this case).
 
 Similarly, in some cases we want to be sure that at least one of
 several conditions is true. In this case, we want to be sure that
-either `n` is zero, or that it is not equal to `-n`.
+either `n` is zero, or that `n` is not equal to `-n`.
 
 ```scala
 package mytest
