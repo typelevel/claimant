@@ -136,3 +136,8 @@ There are a ton of possible improvements:
  * Consider supporting fancy diagrams
  * Consider supporting color output
  * Consider an extensible/modular design
+
+### Credits
+
+This library was inspired by the `assert(...)` macro found in
+[ScalaTest](http://www.scalatest.org/).
