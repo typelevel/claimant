@@ -1,4 +1,4 @@
-## ScalaCheck-Claim
+## Claimant
 
 ```
 | C L A I M |
@@ -19,7 +19,7 @@ This library provides a `Claim(...)` macro which wraps any `Boolean`
 expression and converts it into a labelled `Prop` value. If the
 property fails, ScalaCheck will show you this label.
 
-### Example
+### Examples
 
 Here's an example of using *Claim* to try to prove that `Float` is
 associative:
@@ -27,7 +27,7 @@ associative:
 ```scala
 package mytest
 
-import claim.Claim
+import claimant.Claim
 import org.scalacheck.{Prop, Properties}
 
 object MyTest extends Properties("MyTest") {
@@ -59,6 +59,43 @@ equal, it labels the property with:
 
 This means that in addition to seeing which inputs cause a failure, we
 also see how much we failed by (around `4e-8` in this case).
+
+Similarly, in some cases we want to be sure that at least one of
+several conditions is true. In this case, we want to be sure that
+either `n` is zero, or that it is not equal to `-n`.
+
+```scala
+package mytest
+
+import claimant.Claim
+import org.scalacheck.{Prop, Properties}
+
+object AnotherTest extends Properties("AnotherTest") {
+  property("ints have distinct inverses") = {
+    Prop.forAll { (n: Int) =>
+      Claim(n == 0 || n != -n)
+    }
+  }
+}
+```
+
+Once again, we are out of luck! It turns out that `Int.MinValue` is
+its own negation (there is no positive value large enough to represent
+its actual negation). ScalaCheck helpfully shows us this:
+
+```
+[info] ! AnotherTest.ints have distinct inverses: Falsified after 0 passed tests.
+[info] > Labels of failing property:
+[info] falsified: (-2147483648 == 0 {false}) || (-2147483648 != -2147483648 {false})
+[info] > ARG_0: -2147483648
+```
+
+In this case, `Claim(_)` helpfully shows us the how the different
+branches evaluate (summarizing each branch with `{true}` or
+`{false}`). Being able to see that the right branch ended up testing
+`-2147483648 != -2147483648` cuts to the heart of the problem, and
+doesn't leave the user guessing about how the conditions were
+evaluated.
 
 ### Details
 

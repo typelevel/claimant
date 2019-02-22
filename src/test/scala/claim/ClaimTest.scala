@@ -1,4 +1,4 @@
-package xyz
+package claimant
 
 import org.scalacheck.{Gen, Prop, Properties}
 
@@ -116,4 +116,10 @@ object ClaimTest extends Properties("ClaimTest") {
 
   property("(n1 + (n2 + n3)) == ((n1 + n2) + n3)") =
     test(Claim((n1 + (n2 + n3)) == ((n1 + n2) + n3)), "falsified: 0.2962196 == 0.29621956")
+
+  property("ints have distinct inverses") = {
+    Prop.forAll { (n: Int) =>
+      Claim(n == 0 || n != -n)
+    }
+  }
 }

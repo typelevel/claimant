@@ -1,4 +1,4 @@
-name := "scalacheck-claim"
+name := "claimant"
 
 scalaVersion := "2.12.6"
 

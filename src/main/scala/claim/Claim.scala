@@ -1,4 +1,4 @@
-package xyz
+package claimant
 
 import scala.language.experimental.macros
 
@@ -55,7 +55,7 @@ object Claim {
             val s = meth.toString
             q"""$xx + "." + $s"""
         }
-        c.Expr(q"_root_.xyz.Claim.Condition($t, $label)")
+        c.Expr(q"_root_.claimant.Claim.Condition($t, $label)")
       }
 
       def binaryAny(t: c.Tree, meth: TermName, x: c.Tree, y: c.Tree): c.Expr[Claim.Condition] = {
@@ -81,7 +81,7 @@ object Claim {
             q"""$xx + "." + $s + "(" + $yy + ")""""
         }
 
-        c.Expr(q"_root_.xyz.Claim.Condition($t, $label)")
+        c.Expr(q"_root_.claimant.Claim.Condition($t, $label)")
       }
 
       def binaryBool(t: c.Tree, meth: TermName, x: c.Tree, y: c.Tree): c.Expr[Claim.Condition] = {
@@ -89,11 +89,11 @@ object Claim {
         val yy = recur(y)
         c.Expr(meth.toString match {
           case "$amp$amp" | "$amp" =>
-            q"_root_.xyz.Claim.Condition.And($xx, $yy)"
+            q"_root_.claimant.Claim.Condition.And($xx, $yy)"
           case "$bar$bar" | "$bar" =>
-            q"_root_.xyz.Claim.Condition.Or($xx, $yy)"
+            q"_root_.claimant.Claim.Condition.Or($xx, $yy)"
           case "$up" =>
-            q"_root_.xyz.Claim.Condition.Xor($xx, $yy)"
+            q"_root_.claimant.Claim.Condition.Xor($xx, $yy)"
         })
       }
 
@@ -101,7 +101,7 @@ object Claim {
 
         case q"!$x" =>
           val xx = recur(x)
-          c.Expr(q"_root_.xyz.Claim.Condition.Not($xx)")
+          c.Expr(q"_root_.claimant.Claim.Condition.Not($xx)")
 
         case q"$x.$method($y)" if binaryBoolMethods(method.toString) =>
           binaryBool(t, method, x, y)
@@ -117,7 +117,7 @@ object Claim {
           binaryAny(t, method, x, y)
 
         case t =>
-          c.Expr(q"_root_.xyz.Claim.Condition($t, $t.toString)")
+          c.Expr(q"_root_.claimant.Claim.Condition($t, $t.toString)")
       }
     }
 
