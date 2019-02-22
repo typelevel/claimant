@@ -28,6 +28,12 @@ object Claim {
           q"""${x}.toString + ".min {" + ${input}.toString + "}""""
         case q"($x).max[$tpe]($o)" =>
           q"""${x}.toString + ".max {" + ${input}.toString + "}""""
+        case q"scala.`package`.Ordering.Implicits.infixOrderingOps[$tpe]($x)($o)" =>
+          q"""${x}.toString"""
+        case q"($o).compare($x, $y)" =>
+          q"""${o}.toString + ".compare(" + ${x}.toString + ", " + ${y}.toString + ") {" + ${input}.toString + "}""""
+        case q"($o).tryCompare($x, $y)" =>
+          q"""${o}.toString + ".tryCompare(" + ${x}.toString + ", " + ${y}.toString + ") {" + ${input}.toString + "}""""
         case _ =>
           q"$input.toString"
       })
@@ -102,6 +108,10 @@ object Claim {
         case q"!$x" =>
           val xx = recur(x)
           c.Expr(q"_root_.claimant.Claim.Condition.Not($xx)")
+
+        case q"($o).equiv($x, $y)" =>
+          val label = q"""${o}.toString + ".equiv(" + ${x}.toString + ", " + ${y}.toString + ")""""
+          c.Expr(q"_root_.claimant.Claim.Condition($t, $label)")
 
         case q"$x.$method($y)" if binaryBoolMethods(method.toString) =>
           binaryBool(t, method, x, y)

@@ -105,7 +105,7 @@ expressions:
  * `==` and `!=` (universal equality)
  * `eq` and `ne` (referential equality)
  * `<`, `<=`, `>`, and `>=` (comparisons)
- * `&&`, `&`, `||`, `|`, `^`, and `!`
+ * `&&`, `&`, `||`, `|`, `^`, and `!` (boolean operators)
  * `isEmpty` and `nonEmpty`
  * `startsWith` and `endsWith`
  * `contains`, `containsSlice`, and `apply`

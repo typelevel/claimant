@@ -2,6 +2,14 @@ package claimant
 
 import org.scalacheck.{Gen, Prop, Properties}
 
+case class Qux(n: Int)
+
+object Qux {
+  implicit case object QuxOrdering extends Ordering[Qux] {
+    def compare(x: Qux, y: Qux): Int = Integer.compare(x.n, y.n)
+  }
+}
+
 object ClaimTest extends Properties("ClaimTest") {
 
   val (x, y) = (1, 2)
@@ -117,9 +125,19 @@ object ClaimTest extends Properties("ClaimTest") {
   property("(n1 + (n2 + n3)) == ((n1 + n2) + n3)") =
     test(Claim((n1 + (n2 + n3)) == ((n1 + n2) + n3)), "falsified: 0.2962196 == 0.29621956")
 
-  property("ints have distinct inverses") = {
-    Prop.forAll { (n: Int) =>
-      Claim(n == 0 || n != -n)
-    }
-  }
+  import Ordering.Implicits._
+
+  val (q1, q2) = (Qux(1), Qux(2))
+
+  property("(q1 > q2) == 0") =
+    test(Claim(q1 > q2), "falsified: Qux(1) > Qux(2)")
+
+  property("o.compare(q1, q2) == 0") =
+    test(Claim(Qux.QuxOrdering.compare(q1, q2) == 0), "falsified: QuxOrdering.compare(Qux(1), Qux(2)) {-1} == 0")
+
+  property("o.tryCompare(q1, q2) == Some(0)") =
+    test(Claim(Qux.QuxOrdering.tryCompare(q1, q2) == Some(0)), "falsified: QuxOrdering.tryCompare(Qux(1), Qux(2)) {Some(-1)} == Some(0)")
+
+  property("o.equiv(q1, q2)") =
+    test(Claim(Qux.QuxOrdering.equiv(q1, q2)), "falsified: QuxOrdering.equiv(Qux(1), Qux(2))")
 }
