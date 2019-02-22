@@ -127,6 +127,35 @@ which it will attempt to annotate, such as:
 It should be fairly straightforward to extend this to support other
 shapes, both for `Boolean` expressions and for general annotations.
 
+### Limitations
+
+Currently `Claim(...)` only expands a set of known methods. This means
+that if you have methods which return `Boolean` and write something
+like `Claim(Verifier.verify(dataSet))` your test failures will look
+something like this:
+
+```
+[info] ! FancyTest.verify data sets: Falsified after 4 passed tests.
+[info] > Labels of failing property:
+[info] falsified: false
+[info] > ARG_0: DataSet(...)
+```
+
+The ways to fix this are:
+
+ 1. Have `verify` return a richer result.
+ 2. Inline the `verify` logic in the `Claim(...)` call.
+ 3. Extend *Claimant* to support `Verifier.verify`.
+
+Another problem is that `Claim(...)` inspects method calls based on
+their AST shape. This means that type application, implicit
+parameters, etc. need to be explicitly supported. This also means that
+implicit enrichment (or *bedazzlement*) can muddy the waters a bit and
+obscure the underlying values.
+
+(For an example of how to deal with enrichment, see the support for
+`Ordering.Implicits.infixOrderingOps`.)
+
 ### Future Work
 
 There are a ton of possible improvements:
