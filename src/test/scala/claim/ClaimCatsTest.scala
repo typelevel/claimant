@@ -27,8 +27,10 @@ object ClaimCatsTest extends Properties("ClaimCatsTest") {
   property("(h1 compare h2) == 0") =
     test(Claim((h1 compare h2) == 0), "falsified: OrderForHeight.compare(Height(1), Height(2)) {-1} == 0")
 
-  property("(h1 partialCompare h2) == 0.0") =
-    test(Claim((h1 partialCompare h2) == 0.0), "falsified: OrderForHeight.partialCompare(Height(1), Height(2)) {-1.0} == 0.0")
+  property("(h1 partialCompare h2) == 0.0") = {
+    val (got, expected) = (-1.0, 0.0)
+    test(Claim((h1 partialCompare h2) == 0.0), s"falsified: OrderForHeight.partialCompare(Height(1), Height(2)) {$got} == $expected")
+  }
 
   property("h1 < h1") =
     test(Claim(h1 < h1), "falsified: Height(1) < Height(1)")
