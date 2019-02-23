@@ -97,21 +97,79 @@ sealed abstract class Claim(val res: Boolean) {
 
   import Claim.{Simple, Not, And, Or, Xor}
 
-  def unary_! : Claim =
-    Not(this)
+  /**
+   * Build a ScalaCheck Prop value from a claim.
+   *
+   * This Prop uses two values from the claim: the `res` and the
+   * `label`. Currently it only attaches a label to failed Prop
+   * values, although this could change in the future.
+   */
+  def prop: Prop =
+    if (res) Prop(res) else Prop(res) :| s"falsified: $label"
+
+  /**
+   * Negate this claim, requiring it to be false.
+   */
+  def unary_! : Claim = Not(this)
+
+  /**
+   * Combine two claims, requiring both to be true.
+   *
+   * This is equivalent to & and && for Boolean. It is not named &&
+   * because it does not short-circuit evaluation -- the right-hand
+   * side will be evaluated even if the left-hand side is false.
+   */
   def &(that: Claim): Claim =
     And(this, that)
+
+  /**
+   * Combine two claims, requiring at least one to be true.
+   *
+   * This is equivalent to | and || for Boolean. It is not named ||
+   * because it does not short-circuit evaluation -- the right-hand
+   * side will be evaluated even if the left-hand side is true.
+   */
   def |(that: Claim): Claim =
     Or(this, that)
+
+  /**
+   * Combine two claims, requiring exactly one to be true.
+   *
+   * This is eqvuialent to ^ for Boolean. It is an exclusive-or, which
+   * means that it is false if both claims are false or both claims
+   * are true, and true otherwise.
+   */
   def ^(that: Claim): Claim =
     Xor(this, that)
 
+  /**
+   * Convert a claim to a representation using either.
+   *
+   * This representation provides an easy way to test claims to ensure
+   * their labels are accurate.
+   */
   def toEither: Either[String, String] =
     if (res) Right(label) else Left(label)
 
+  /**
+   * Display a status string for a claim.
+   *
+   * This method is used to annotate sub-claims in a larger claim.
+   */
   def status: String =
     if (res) "{true}" else "{false}"
 
+  /**
+   * Label explaining a claim's expression.
+   *
+   * This label will be used with ScalaCheck to explain failing
+   * properties. Crucially, it will be called recursively, so it
+   * should not add information that is only relevant at the
+   * top-level.
+   *
+   * The convention is _not_ to parenthesize a top-level expression in
+   * a label, but only sub-expressions.
+   */
   def label: String =
     this match {
       case Simple(_, msg) =>
@@ -125,7 +183,4 @@ sealed abstract class Claim(val res: Boolean) {
       case Not(p0) =>
         s"!(${p0.label} ${p0.status})"
     }
-
-  def prop: Prop =
-    if (res) Prop(res) else Prop(res) :| s"falsified: $label"
 }
