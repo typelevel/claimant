@@ -3,7 +3,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val claimantSettings = Seq(
   name := "claimant",
-  organization := "com.stripe",
+  organization := "org.spire-math",
   scalaVersion := "2.12.6",
   crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.6"),
   libraryDependencies ++=
