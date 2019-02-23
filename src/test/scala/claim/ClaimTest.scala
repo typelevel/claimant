@@ -1,6 +1,7 @@
 package claimant
 
-import org.scalacheck.{Gen, Prop, Properties}
+import org.scalacheck.Properties
+import Test.test
 
 case class Qux(n: Int)
 
@@ -20,24 +21,29 @@ object ClaimTest extends Properties("ClaimTest") {
   val ys = Set(1, 2, 3)
   val zs = Map("foo" -> 1)
 
-  def run(p: Prop): Either[Set[String], Set[String]] = {
-    val r = p.apply(Gen.Parameters.default)
-    val passed = r.status == Prop.True || r.status == Prop.Proof
-    if (passed) Right(r.labels) else Left(r.labels)
-  }
+  property("x == y") =
+    test(Claim(x == y), "falsified: 1 == 2")
 
-  def test(p: Prop, msg: String): Prop =
-    Claim(run(p) == Left(Set(msg)))
+  property("x != x") =
+    test(Claim(x != x), "falsified: 1 != 1")
 
-  property("x == y")   = test(Claim(x == y),   "falsified: 1 == 2")
-  property("x != x")   = test(Claim(x != x),   "falsified: 1 != 1")
-  property("s0 eq s1") = test(Claim(s0 eq s1), "falsified: hello eq goodbye")
-  property("s0 ne s0") = test(Claim(s0 ne s0), "falsified: hello ne hello")
+  property("s0 eq s1") =
+    test(Claim(s0 eq s1), "falsified: hello eq goodbye")
 
-  property("x < x")  = test(Claim(x < x),  "falsified: 1 < 1")
-  property("y <= x") = test(Claim(y <= x), "falsified: 2 <= 1")
-  property("x > x")  = test(Claim(x > x),  "falsified: 1 > 1")
-  property("x >= y") = test(Claim(x >= y), "falsified: 1 >= 2")
+  property("s0 ne s0") =
+    test(Claim(s0 ne s0), "falsified: hello ne hello")
+
+  property("x < x") =
+    test(Claim(x < x), "falsified: 1 < 1")
+
+  property("y <= x") =
+    test(Claim(y <= x), "falsified: 2 <= 1")
+
+  property("x > x") =
+    test(Claim(x > x), "falsified: 1 > 1")
+
+  property("x >= y") =
+    test(Claim(x >= y), "falsified: 1 >= 2")
 
   property("xs.size == 0") =
     test(Claim(xs.size == 0), "falsified: List(1, 2, 3, 4).size {4} == 0")

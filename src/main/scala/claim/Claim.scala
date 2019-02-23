@@ -1,47 +1,31 @@
 package claimant
 
-import scala.language.experimental.macros
-
+import claimant.scribes._
 import org.scalacheck.Prop
+import scala.language.experimental.macros
 import scala.reflect.macros.blackbox.Context
 
 object Claim {
 
   def apply(cond: Boolean): Prop = macro decompose
 
+  val scribes: List[Scribe] =
+    ForIntWrapper ::
+    ForDoubleWrapper ::
+    ForComparators ::
+    ForCollections ::
+    Nil
+
   def decompose(c: Context)(cond: c.Expr[Boolean]): c.Expr[Prop] = {
     import c.universe._
 
-    def annotate(input: c.Tree): c.Expr[String] =
-      c.Expr(input match {
-        case q"($x).size" =>
-          q"""${x}.toString + ".size {" + ${input}.toString + "}""""
-        case q"($x).length" =>
-          q"""${x}.toString + ".length {" + ${input}.toString + "}""""
-        case q"($x).compare($y)" =>
-          q"""${x}.toString + ".compare(" + ${y}.toString + ") {" + ${input}.toString + "}""""
-        case q"($x).compareTo($y)" =>
-          q"""${x}.toString + ".compareTo(" + ${y}.toString + ") {" + ${input}.toString + "}""""
-        case q"($x).lengthCompare($y)" =>
-          q"""${x}.toString + ".lengthCompare(" + ${y}.toString + ") {" + ${input}.toString + "}""""
-        case q"($x).min[$tpe]($o)" =>
-          q"""${x}.toString + ".min {" + ${input}.toString + "}""""
-        case q"($x).max[$tpe]($o)" =>
-          q"""${x}.toString + ".max {" + ${input}.toString + "}""""
-        case q"scala.`package`.Ordering.Implicits.infixOrderingOps[$tpe]($x)($o)" =>
-          q"""${x}.toString"""
-        case q"($o).compare($x, $y)" =>
-          q"""${o}.toString + ".compare(" + ${x}.toString + ", " + ${y}.toString + ") {" + ${input}.toString + "}""""
-        case q"($o).tryCompare($x, $y)" =>
-          q"""${o}.toString + ".tryCompare(" + ${x}.toString + ", " + ${y}.toString + ") {" + ${input}.toString + "}""""
-        case _ =>
-          q"$input.toString"
-      })
+    def annotate(input: c.Tree): c.Tree =
+      Scribe.annotate(c)(input, scribes)
 
-    def recur(t: c.Tree): c.Expr[Claim.Condition] = {
+    def recur(t: c.Tree): c.Expr[Claim] = {
 
       val unaryAnyMethods =
-        Set("isEmpty", "nonEmpty")
+        Set("isEmpty", "nonEmpty", "isZero", "nonZero")
 
       val binaryAnyMethods =
         Set(
@@ -49,85 +33,101 @@ object Claim {
           "$less", "$greater", "$less$eq", "$greater$eq",
           "startsWith", "endsWith", "contains", "containsSlice", "apply",
           "isDefinedAt", "sameElements", "subsetOf",
-          "exists", "forall")
+          "exists", "forall",
+          "min", "max", "pmin", "pmax")
 
       val binaryBoolMethods =
         Set("$amp", "$amp$amp", "$bar", "$bar$bar", "$up")
 
-      def unaryAny(t: c.Tree, meth: TermName, x: c.Tree): c.Expr[Claim.Condition] = {
+      def unaryAny(t: c.Tree, meth: TermName, x: c.Tree): c.Expr[Claim] = {
         val xx = annotate(x)
-        val label = meth.toString match {
-          case _ =>
-            val s = meth.toString
-            q"""$xx + "." + $s"""
-        }
-        c.Expr(q"_root_.claimant.Claim.Condition($t, $label)")
+        val label = Format.str1(c)(xx, meth.toString, None)
+        c.Expr(q"_root_.claimant.Claim($t, $label)")
       }
 
-      def binaryAny(t: c.Tree, meth: TermName, x: c.Tree, y: c.Tree): c.Expr[Claim.Condition] = {
+      def binaryAny(t: c.Tree, meth: TermName, x: c.Tree, y: c.Tree): c.Expr[Claim] = {
         val xx = annotate(x)
         val yy = annotate(y)
         val label: c.Tree = meth.toString match {
-          case "$eq$eq" => q"""$xx + " == " + $yy"""
-          case "$bang$eq" => q"""$xx + " != " + $yy"""
-          case "eq" => q"""$xx + " eq " + $yy"""
-          case "ne" => q"""$xx + " ne " + $yy"""
+          case "$eq$eq" => Format.str2(c)(xx, "==", yy, None)
+          case "$bang$eq" => Format.str2(c)(xx, "!=", yy, None)
+          case "eq" => Format.str2(c)(xx, "eq", yy, None)
+          case "ne" => Format.str2(c)(xx, "ne", yy, None)
 
-          case "$less" => q"""$xx + " < " + $yy"""
-          case "$less$eq" => q"""$xx + " <= " + $yy"""
-          case "$greater" => q"""$xx + " > " + $yy"""
-          case "$greater$eq" => q"""$xx + " >= " + $yy"""
+          case "$less" => Format.str2(c)(xx, "<", yy, None)
+          case "$less$eq" => Format.str2(c)(xx, "<=", yy, None)
+          case "$greater" => Format.str2(c)(xx, ">", yy, None)
+          case "$greater$eq" => Format.str2(c)(xx, ">=", yy, None)
 
           case "exists" | "forall" =>
-            val s: String = meth.toString
-            q"""$xx + "." + $s + "(...)""""
+            Format.str1(c)(xx, meth.toString + "(...)", None)
 
           case _ =>
-            val s: String = meth.toString
-            q"""$xx + "." + $s + "(" + $yy + ")""""
+            Format.str1_1(c)(xx, meth.toString, yy, None)
         }
 
-        c.Expr(q"_root_.claimant.Claim.Condition($t, $label)")
+        c.Expr(q"_root_.claimant.Claim($t, $label)")
       }
 
-      def binaryBool(t: c.Tree, meth: TermName, x: c.Tree, y: c.Tree): c.Expr[Claim.Condition] = {
+      def binaryBool(t: c.Tree, meth: TermName, x: c.Tree, y: c.Tree): c.Expr[Claim] = {
         val xx = recur(x)
         val yy = recur(y)
         c.Expr(meth.toString match {
-          case "$amp$amp" | "$amp" =>
-            q"_root_.claimant.Claim.Condition.And($xx, $yy)"
-          case "$bar$bar" | "$bar" =>
-            q"_root_.claimant.Claim.Condition.Or($xx, $yy)"
-          case "$up" =>
-            q"_root_.claimant.Claim.Condition.Xor($xx, $yy)"
+          case "$amp$amp" | "$amp" => q"$xx & $yy"
+          case "$bar$bar" | "$bar" => q"$xx | $yy"
+          case "$up" => q"$xx ^ $yy"
         })
       }
 
       t match {
 
+        // type class: Equiv
+        case q"($o).equiv($x, $y)" =>
+          val label = Format.str1_2(c)(o, "equiv", x, y, None)
+          c.Expr(q"_root_.claimant.Claim($t, $label)")
+
+        // type class: cats.Eq
+        case q"($o).eqv($x, $y)" =>
+          val label = Format.str2(c)(x, "===", y, None)
+          c.Expr(q"_root_.claimant.Claim($t, $label)")
+        case q"($o).neqv($x, $y)" =>
+          val label = Format.str2(c)(x, "=!=", y, None)
+          c.Expr(q"_root_.claimant.Claim($t, $label)")
+
+        // type class: cats.PartialOrder
+        case q"($o).lt($x, $y)" =>
+          val label = Format.str2(c)(x, "<", y, None)
+          c.Expr(q"_root_.claimant.Claim($t, $label)")
+        case q"($o).lteqv($x, $y)" =>
+          val label = Format.str2(c)(x, "<=", y, None)
+          c.Expr(q"_root_.claimant.Claim($t, $label)")
+        case q"($o).gt($x, $y)" =>
+          val label = Format.str2(c)(x, ">", y, None)
+          c.Expr(q"_root_.claimant.Claim($t, $label)")
+        case q"($o).gteqv($x, $y)" =>
+          val label = Format.str2(c)(x, ">=", y, None)
+          c.Expr(q"_root_.claimant.Claim($t, $label)")
+
+        // boolean combinators
         case q"!$x" =>
           val xx = recur(x)
-          c.Expr(q"_root_.claimant.Claim.Condition.Not($xx)")
-
-        case q"($o).equiv($x, $y)" =>
-          val label = q"""${o}.toString + ".equiv(" + ${x}.toString + ", " + ${y}.toString + ")""""
-          c.Expr(q"_root_.claimant.Claim.Condition($t, $label)")
-
+          c.Expr(q"!$xx")
         case q"$x.$method($y)" if binaryBoolMethods(method.toString) =>
           binaryBool(t, method, x, y)
-
         case q"$x.$method" if unaryAnyMethods(method.toString) =>
           unaryAny(t, method, x)
         case q"$x.$method()" if unaryAnyMethods(method.toString) =>
           unaryAny(t, method, x)
 
+        // any annotations
         case q"$x.$method($y)" if binaryAnyMethods(method.toString) =>
           binaryAny(t, method, x, y)
         case q"$x.$method[$tpe]($y)" if binaryAnyMethods(method.toString) =>
           binaryAny(t, method, x, y)
 
+        // fall-through
         case t =>
-          c.Expr(q"_root_.claimant.Claim.Condition($t, $t.toString)")
+          c.Expr(q"_root_.claimant.Claim($t, $t.toString)")
       }
     }
 
@@ -135,44 +135,48 @@ object Claim {
     c.Expr(q"($e).prop")
   }
 
-  class Annotated(val underlying: Any, override val toString: String)
+  def apply(res: Boolean, msg: String): Claim = Simple(res, msg)
 
-  sealed abstract class Condition(val res: Boolean) {
+  case class Simple(b: Boolean, msg: String) extends Claim(b)
+  case class And(lhs: Claim, rhs: Claim) extends Claim(lhs.res && rhs.res)
+  case class Or(lhs: Claim, rhs: Claim) extends Claim(lhs.res || rhs.res)
+  case class Xor(lhs: Claim, rhs: Claim) extends Claim(lhs.res ^ rhs.res)
+  case class Not(c: Claim) extends Claim(!c.res)
+}
 
-    import Condition._
+sealed abstract class Claim(val res: Boolean) {
 
-    def toEither: Either[String, String] =
-      if (res) Right(label) else Left(label)
+  import Claim.{Simple, Not, And, Or, Xor}
 
-    def status: String =
-      if (res) "{true}" else "{false}"
+  def unary_! : Claim =
+    Not(this)
+  def &(that: Claim): Claim =
+    And(this, that)
+  def |(that: Claim): Claim =
+    Or(this, that)
+  def ^(that: Claim): Claim =
+    Xor(this, that)
 
-    def label: String =
-      this match {
-        case Simple(_, msg) =>
-          msg
-        case And(p0, p1) =>
-          s"(${p0.label} ${p0.status}) && (${p1.label} ${p1.status})"
-        case Or(p0, p1) =>
-          s"(${p0.label} ${p0.status}) || (${p1.label} ${p1.status})"
-        case Xor(p0, p1) =>
-          s"(${p0.label} ${p0.status}) ^ (${p1.label} ${p1.status})"
-        case Not(p0) =>
-          s"!(${p0.label} ${p0.status})"
-      }
+  def toEither: Either[String, String] =
+    if (res) Right(label) else Left(label)
 
-    def prop: Prop =
-      if (res) Prop(res) else Prop(res) :| s"falsified: $label"
-  }
+  def status: String =
+    if (res) "{true}" else "{false}"
 
-  object Condition {
+  def label: String =
+    this match {
+      case Simple(_, msg) =>
+        msg
+      case And(p0, p1) =>
+        s"(${p0.label} ${p0.status}) && (${p1.label} ${p1.status})"
+      case Or(p0, p1) =>
+        s"(${p0.label} ${p0.status}) || (${p1.label} ${p1.status})"
+      case Xor(p0, p1) =>
+        s"(${p0.label} ${p0.status}) ^ (${p1.label} ${p1.status})"
+      case Not(p0) =>
+        s"!(${p0.label} ${p0.status})"
+    }
 
-    def apply(res: Boolean, msg: String): Condition = Simple(res, msg)
-
-    case class Simple(b: Boolean, msg: String) extends Condition(b)
-    case class And(lhs: Condition, rhs: Condition) extends Condition(lhs.res && rhs.res)
-    case class Or(lhs: Condition, rhs: Condition) extends Condition(lhs.res || rhs.res)
-    case class Xor(lhs: Condition, rhs: Condition) extends Condition(lhs.res ^ rhs.res)
-    case class Not(c: Condition) extends Condition(!c.res)
-  }
+  def prop: Prop =
+    if (res) Prop(res) else Prop(res) :| s"falsified: $label"
 }
