@@ -60,6 +60,10 @@ lazy val claimantSettings = Seq(
     else
       Some("Releases" at nexus + "service/local/staging/deploy/maven2")
   },
+  scmInfo := Some(
+    ScmInfo(
+      url("https://github.com/non/claimant"),
+      "scm:git:git@github.com:non/claimant.git"))
   pomExtra := (
     <url>https://github.com/non/claimant</url>
     <licenses>
