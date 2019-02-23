@@ -63,7 +63,7 @@ lazy val claimantSettings = Seq(
   scmInfo := Some(
     ScmInfo(
       url("https://github.com/non/claimant"),
-      "scm:git:git@github.com:non/claimant.git"))
+      "scm:git:git@github.com:non/claimant.git")),
   pomExtra := (
     <url>https://github.com/non/claimant</url>
     <licenses>
