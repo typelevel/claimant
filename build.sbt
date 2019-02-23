@@ -92,4 +92,5 @@ lazy val claimant = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(
     scalaJSStage in Global := FastOptStage,
     parallelExecution := false,
+    coverageEnabled := false,
     jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv())

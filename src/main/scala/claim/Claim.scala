@@ -143,15 +143,6 @@ sealed abstract class Claim(val res: Boolean) {
     Xor(this, that)
 
   /**
-   * Convert a claim to a representation using either.
-   *
-   * This representation provides an easy way to test claims to ensure
-   * their labels are accurate.
-   */
-  def toEither: Either[String, String] =
-    if (res) Right(label) else Left(label)
-
-  /**
    * Display a status string for a claim.
    *
    * This method is used to annotate sub-claims in a larger claim.

@@ -221,6 +221,20 @@ obscure the underlying values.
 (For an example of how to deal with enrichment, see the support for
 `Ordering.Implicits.infixOrderingOps`.)
 
+### Development
+
+To measure code coverage, do the following:
+
+```
+$ sbt claimant/clean coverage claimant/test coverageReport
+```
+
+Assuming everything works, the result should end up someplace like:
+
+```
+.jvm/target/scala-2.12/scoverage-report/index.html
+```
+
 ### Future Work
 
 There are a ton of possible improvements:

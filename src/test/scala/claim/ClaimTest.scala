@@ -21,6 +21,13 @@ object ClaimTest extends Properties("ClaimTest") {
   val ys = Set(1, 2, 3)
   val zs = Map("foo" -> 1)
 
+  case object Dummy {
+    def isEmpty(): Boolean = false
+  }
+
+  property("false") =
+    test(Claim(false), "falsified: false")
+
   property("x == y") =
     test(Claim(x == y), "falsified: 1 == 2")
 
@@ -68,6 +75,9 @@ object ClaimTest extends Properties("ClaimTest") {
 
   property("xs.isEmpty") =
     test(Claim(xs.isEmpty), "falsified: List(1, 2, 3, 4).isEmpty")
+
+  property("xs.isEmpty()") =
+    test(Claim(Dummy.isEmpty()), "falsified: Dummy.isEmpty")
 
   property("ws.nonEmpty") =
     test(Claim(ws.nonEmpty), "falsified: List().nonEmpty")
