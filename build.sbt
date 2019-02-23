@@ -64,28 +64,32 @@ lazy val claimantSettings = Seq(
     ScmInfo(
       url("https://github.com/non/claimant"),
       "scm:git:git@github.com:non/claimant.git")),
-  pomExtra := (
-    <url>https://github.com/non/claimant</url>
-    <licenses>
-      <license>
-        <name>Apache 2</name>
-        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        <distribution>repo</distribution>
-        <comments>A business-friendly OSS license</comments>
-      </license>
-    </licenses>
-    <scm>
-      <url>git@github.com:non/claimant.git</url>
-      <connection>scm:git:git@github.com:non/claimant.git</connection>
-    </scm>
-    <developers>
-      <developer>
-        <id>non</id>
-        <name>Erik Osheim</name>
-        <url>http://github.com/non/</url>
-      </developer>
-    </developers>
-  )
+  homepage := Some(url("https://github.com/non/claimant/")),
+  licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+  developers := List(
+    Developer("non", "Erik Osheim", "erik@osheim.org", url("http://github.com/non/")))
+  // pomExtra := (
+  //   <url>https://github.com/non/claimant</url>
+  //   <licenses>
+  //     <license>
+  //       <name>Apache 2</name>
+  //       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+  //       <distribution>repo</distribution>
+  //       <comments>A business-friendly OSS license</comments>
+  //     </license>
+  //   </licenses>
+  //   <scm>
+  //     <url>git@github.com:non/claimant.git</url>
+  //     <connection>scm:git:git@github.com:non/claimant.git</connection>
+  //   </scm>
+  //   <developers>
+  //     <developer>
+  //       <id>non</id>
+  //       <name>Erik Osheim</name>
+  //       <url>http://github.com/non/</url>
+  //     </developer>
+  //   </developers>
+  // )
 )
 
 lazy val claimant = crossProject(JSPlatform, JVMPlatform)
