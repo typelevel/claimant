@@ -4,7 +4,7 @@ package scribes
 import scala.reflect.macros.blackbox.Context
 
 object ForIntWrapper extends Scribe {
-  def annotate(c: Context)(input: c.Tree): Option[c.Tree] = {
+  def annotate(c: Context)(input: c.Tree, sys: System): Option[c.Tree] = {
     import c.universe._
     input match {
       case q"scala.Predef.intWrapper($x).max($y)" =>

@@ -2,21 +2,18 @@ package claimant
 
 import scala.reflect.macros.blackbox.Context
 
+/**
+ * Scribe represents a set of strategies for annotating expressions to
+ * produce more interesting String representations.
+ *
+ * The annotate method should return None in cases where the
+ * expression shape is not recognized. It is given a reference to the
+ * System because annotation might be recursive. (Currently recursive
+ * annotations are not used due to the complexity of displaying that
+ * information.)
+ *
+ * The trees that result from annotate must be String expressions.
+ */
 trait Scribe {
-  def annotate(c: Context)(input: c.Tree): Option[c.Tree]
-}
-
-object Scribe {
-
-  def annotate(c: Context)(input: c.Tree, scribes: List[Scribe]): c.Tree =
-    scribes match {
-      case Nil =>
-        import c.universe._
-        q"$input.toString"
-      case scribe :: rest =>
-        scribe.annotate(c)(input) match {
-          case Some(t) => t
-          case None => Scribe.annotate(c)(input, rest)
-        }
-    }
+  def annotate(c: Context)(input: c.Tree, sys: System): Option[c.Tree]
 }
