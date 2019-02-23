@@ -127,6 +127,71 @@ which it will attempt to annotate, such as:
 It should be fairly straightforward to extend this to support other
 shapes, both for `Boolean` expressions and for general annotations.
 
+### Purity
+
+Currently `Claim(...)` will potentially evaluate its expression (or
+sub-expressions) multiple times, in any order. In the future we could
+be more up-tight about preserving execution order and ensuring
+sub-expressions are run exactly as they would be, but so far this
+hasn't been a priority.
+
+For example, assuming that the `missilesFiredAt` method is
+side-effecting, and returns the number of missiles that were just
+fired, consider the following code:
+
+```scala
+def missilesFiredAt(target: String): Int = {
+  val num = scala.util.Random.nextInt(3) + 3
+  println(s"firing $num missiles at $target")
+  num
+}
+
+property("notTooManyMissiles") =
+  Claim((missilesFiredAt("moon") max missilesFiredAt("mars")) < 4)
+```
+
+Setting aside the questionable wisdom of launching missiles during a
+test, here's an example of the output we might see:
+
+```
+firing 5 missiles at moon
+firing 3 missiles at mars
+firing 4 missiles at moon
+firing 4 missiles at mars
+firing 4 missiles at moon
+firing 3 missiles at mars
+[info] ! MissileTest.notTooManyMissiles: Falsified after 0 passed tests.
+[info] > Labels of failing property:
+[info] falsified: 4 max 4 {4} < 4
+```
+
+As we can see, Claimant is evaluating each expression multiple times.
+The values we see in the test label (`4` for the Moon and `4` for
+Mars) aren't necessarily the same ones used to describe the test
+failing, we also see that at various points we launched `5` missiles
+at the Moon, and `3` missiles at Mars.
+
+In cases where side-effects are unavoidable, consider evalauting them
+*before* calling `Claim(...)`:
+
+```
+property("notTooManyMissiles") = {
+  val x = missilesFiredAt("moon")
+  val y = missilesFiredAt("mars")
+  Claim((x max y) < 4)
+}
+```
+
+This will result in more consistent test output:
+
+```
+firing 5 missiles at moon
+firing 5 missiles at mars
+[info] ! MissileTest.notTooManyMissiles: Falsified after 0 passed tests.
+[info] > Labels of failing property:
+[info] falsified: 5 max 5 {5} < 4
+```
+
 ### Limitations
 
 Currently `Claim(...)` only expands a set of known methods. This means
