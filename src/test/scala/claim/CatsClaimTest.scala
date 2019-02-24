@@ -14,7 +14,7 @@ object Height {
   }
 }
 
-object ClaimCatsTest extends Properties("ClaimCatsTest") {
+object CatsClaimTest extends Properties("ClaimCatsTest") {
 
   val (h1, h2) = (Height(1), Height(2))
 
