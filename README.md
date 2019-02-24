@@ -16,7 +16,7 @@ many cases it is useful to be able to see the test or comparison that
 failed.
 
 This library provides a `Claim(...)` macro which wraps any `Boolean`
-expression and converts it into a labelled `Prop` value. If the
+expression and converts it into a labeled `Prop` value. If the
 property fails, ScalaCheck will show you this label.
 
 ### Quick Start
@@ -123,7 +123,7 @@ evaluated.
 
 ### Details
 
-The `Claim(_)` macro reconizes many different kinds of `Boolean`
+The `Claim(_)` macro recognizes many different kinds of `Boolean`
 expressions:
 
  * `==` and `!=` (universal equality)
@@ -155,7 +155,7 @@ shapes, both for `Boolean` expressions and for general annotations.
 
 Currently `Claim(...)` will potentially evaluate its expression (or
 sub-expressions) multiple times, in any order. In the future we could
-be more up-tight about preserving execution order and ensuring
+be more uptight about preserving execution order and ensuring
 sub-expressions are run exactly as they would be, but so far this
 hasn't been a priority.
 
@@ -195,7 +195,7 @@ Mars) aren't necessarily the same ones used to describe the test
 failing, we also see that at various points we launched `5` missiles
 at the Moon, and `3` missiles at Mars.
 
-In cases where side-effects are unavoidable, consider evalauting them
+In cases where side-effects are unavoidable, consider evaluating them
 *before* calling `Claim(...)`:
 
 ```
@@ -267,7 +267,7 @@ There are a ton of possible improvements:
  * Support more methods/shapes.
  * Minimize recomputation in the macro.
  * Support using `Show` (or another type class) instead of `toString`.
- * Consider using raw trees instead of quasiquotes.
+ * Consider using raw trees instead of quasi-quotes.
  * Consider supporting fancy diagrams
  * Consider supporting color output
  * Consider an extensible/modular design
