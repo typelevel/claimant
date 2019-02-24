@@ -118,7 +118,7 @@ In this case, `Claim(_)` helpfully shows us the how the different
 branches evaluate (summarizing each branch with `{true}` or
 `{false}`). Being able to see that the right branch ended up testing
 `-2147483648 != -2147483648` cuts to the heart of the problem, and
-doesn't leave the user guessing about how the conditions were
+doesn't leave the caller guessing about how the conditions were
 evaluated.
 
 ### Details
