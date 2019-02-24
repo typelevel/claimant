@@ -2,7 +2,6 @@ import ReleaseTransformations._
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val claimantSettings = Seq(
-  name := "claimant",
   organization := "org.spire-math",
   scalaVersion := "2.12.6",
   crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.6"),
@@ -67,38 +66,33 @@ lazy val claimantSettings = Seq(
   homepage := Some(url("https://github.com/non/claimant/")),
   licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
-    Developer("non", "Erik Osheim", "erik@osheim.org", url("http://github.com/non/")))
-  // pomExtra := (
-  //   <url>https://github.com/non/claimant</url>
-  //   <licenses>
-  //     <license>
-  //       <name>Apache 2</name>
-  //       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-  //       <distribution>repo</distribution>
-  //       <comments>A business-friendly OSS license</comments>
-  //     </license>
-  //   </licenses>
-  //   <scm>
-  //     <url>git@github.com:non/claimant.git</url>
-  //     <connection>scm:git:git@github.com:non/claimant.git</connection>
-  //   </scm>
-  //   <developers>
-  //     <developer>
-  //       <id>non</id>
-  //       <name>Erik Osheim</name>
-  //       <url>http://github.com/non/</url>
-  //     </developer>
-  //   </developers>
-  // )
-)
+    Developer("non", "Erik Osheim", "erik@osheim.org", url("http://github.com/non/"))))
 
-lazy val claimant = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
-  .withoutSuffixFor(JVMPlatform)
+lazy val noPublish = Seq(
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false)
+
+lazy val root = project
   .in(file("."))
+  .settings(name := "root")
+  .settings(claimantSettings: _*)
+  .settings(noPublish: _*)
+  .aggregate(coreJVM, coreJS)
+  .dependsOn(coreJVM, coreJS)
+
+lazy val core = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("."))
+  .settings(name := "claimant")
   .settings(claimantSettings: _*)
   .jsSettings(
     scalaJSStage in Global := FastOptStage,
     parallelExecution := false,
     coverageEnabled := false,
     jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv())
+
+lazy val coreJVM = core.jvm
+
+lazy val coreJS = core.js
+
