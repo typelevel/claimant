@@ -19,6 +19,30 @@ This library provides a `Claim(...)` macro which wraps any `Boolean`
 expression and converts it into a labelled `Prop` value. If the
 property fails, ScalaCheck will show you this label.
 
+### Quick Start
+
+Claimant supports Scala 2.11 and 2.12, and is available from Sonatype.
+
+To include Claimant in your projects, you can use the following
+`build.sbt` snippet:
+
+```scala
+libraryDependencies += "org.spire-math" %% "claimant" % "0.0.1"
+```
+
+Claimant also supports Scala.js. To use Claimant in your Scala.js
+projects, include the following `build.sbt` snippet:
+
+```scala
+libraryDependencies += "org.spire-math" %%% "claimant" % "0.0.1"
+```
+
+**Please note** that Claimant is still a very young project. While we
+will try to keep basic source compatibility around the `Claim(...)`
+macro itself, it's very likely that Claim's library internals will
+change significantly between releases. No compatibility (binary or
+otherwise) is guaranteed at this point.
+
 ### Examples
 
 Here's an example of using `Claim(...)` to try to prove that `Float`
