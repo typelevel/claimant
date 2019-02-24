@@ -276,3 +276,10 @@ There are a ton of possible improvements:
 
 This library was inspired by the `assert(...)` macro found in
 [ScalaTest](http://www.scalatest.org/).
+
+### Copyright and License
+
+All code is available to you under the Apache 2 license, available at
+https://opensource.org/licenses/Apache-2.0.
+
+Copyright Erik Osheim, 2019.
