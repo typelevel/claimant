@@ -247,10 +247,10 @@ obscure the underlying values.
 
 ### Development
 
-To measure code coverage, do the following:
+To measure code coverage for 2.12, do the following:
 
 ```
-$ sbt claimant/clean coverage claimant/test coverageReport
+$ sbt '++ 2.12.6' coreJVM/clean coverage coreJVM/test coverageReport
 ```
 
 Assuming everything works, the result should end up someplace like:
@@ -258,6 +258,22 @@ Assuming everything works, the result should end up someplace like:
 ```
 .jvm/target/scala-2.12/scoverage-report/index.html
 ```
+
+To measure coverage in 2.11 you'd instead do:
+
+```
+$ sbt '++ 2.11.12' coreJVM/clean coverage coreJVM/test coverageReport
+```
+
+And the result would end up someplace like:
+
+```
+.jvm/target/scala-2.11/scoverage-report/index.html
+```
+
+There's at least some code in Claimant that is specific to either 2.11
+or 2.12, making it unlikely that we'll achieve 100% coverage under
+either version independently.
 
 ### Future Work
 
