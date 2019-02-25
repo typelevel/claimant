@@ -78,12 +78,28 @@ lazy val root = project
   .settings(name := "root")
   .settings(claimantSettings: _*)
   .settings(noPublish: _*)
-  .aggregate(coreJVM, coreJS)
-  .dependsOn(coreJVM, coreJS)
+  .aggregate(mcJVM, mcJS, coreJVM, coreJS)
+  .dependsOn(mcJVM, mcJS, coreJVM, coreJS)
+
+lazy val mc = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("mc"))
+  .settings(name := "claimant-mc")
+  .settings(claimantSettings: _*)
+  .jsSettings(
+    scalaJSStage in Global := FastOptStage,
+    parallelExecution := false,
+    coverageEnabled := false,
+    jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv())
+
+lazy val mcJVM = mc.jvm
+
+lazy val mcJS = mc.js
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("."))
+  .dependsOn(mc)
   .settings(name := "claimant")
   .settings(claimantSettings: _*)
   .jsSettings(
