@@ -27,14 +27,14 @@ To include Claimant in your projects, you can use the following
 `build.sbt` snippet:
 
 ```scala
-libraryDependencies += "org.spire-math" %% "claimant" % "0.0.1"
+libraryDependencies += "org.spire-math" %% "claimant" % "0.0.2"
 ```
 
 Claimant also supports Scala.js. To use Claimant in your Scala.js
 projects, include the following `build.sbt` snippet:
 
 ```scala
-libraryDependencies += "org.spire-math" %%% "claimant" % "0.0.1"
+libraryDependencies += "org.spire-math" %%% "claimant" % "0.0.2"
 ```
 
 **Please note** that Claimant is still a very young project. While we
