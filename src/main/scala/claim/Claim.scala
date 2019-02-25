@@ -50,10 +50,8 @@ object Claim {
       Nil
 
     val scribes: List[Scribe] =
-      mc.Macros.forVersion[Scribe](s.ForIntWrapper)(s.ForIntWrapper211) ::
-      mc.Macros.forVersion[Scribe](s.ForFloatWrapper)(s.ForFloatWrapper211) ::
-      // s.ForFloatWrapper ::
-      // s.ForDoubleWrapper ::
+      s.ForRichWrappers.ForIntWrapper ::
+      s.ForRichWrappers.ForFloatWrapper ::
       s.ForComparators ::
       s.ForCollections ::
       Nil

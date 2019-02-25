@@ -3,7 +3,7 @@ package scribes
 
 import scala.reflect.macros.blackbox.Context
 
-abstract class ForWrapperGeneric extends Scribe {
+abstract class ForRichWrappers extends Scribe {
   def wrappers: Set[String]
   def unops: Set[String]
   def binops: Set[String]
@@ -21,40 +21,37 @@ abstract class ForWrapperGeneric extends Scribe {
   }
 }
 
-abstract class ForIntWrapperGeneric extends ForWrapperGeneric {
-  val unops: Set[String] = Set("signum")
-  val binops: Set[String] = Set("max", "min")
-}
+object ForRichWrappers {
 
-object ForIntWrapper extends ForIntWrapperGeneric {
-  final val wrappers = Set(
+  val ints: Set[String] = Set(
     "scala.Predef.byteWrapper",
     "scala.Predef.shortWrapper",
     "scala.Predef.intWrapper",
     "scala.Predef.longWrapper")
-}
 
-object ForIntWrapper211 extends ForIntWrapperGeneric {
-  final val wrappers = Set(
+  val ints211: Set[String] = Set(
     "scala.this.Predef.byteWrapper",
     "scala.this.Predef.shortWrapper",
     "scala.this.Predef.intWrapper",
     "scala.this.Predef.longWrapper")
-}
 
-abstract class ForFloatWrapperGeneric extends ForWrapperGeneric {
-  val unops: Set[String] = Set("abs", "ceil", "floor", "round")
-  val binops: Set[String] = Set("max", "min")
-}
+  object ForIntWrapper extends ForRichWrappers {
+    val wrappers: Set[String] = mc.Macros.forVersion(ints)(ints211)
+    val unops: Set[String] = Set("signum")
+    val binops: Set[String] = Set("max", "min")
+  }
 
-object ForFloatWrapper extends ForFloatWrapperGeneric {
-  final val wrappers = Set(
+  val floats: Set[String] = Set(
     "scala.Predef.floatWrapper",
     "scala.Predef.doubleWrapper")
-}
 
-object ForFloatWrapper211 extends ForFloatWrapperGeneric {
-  final val wrappers = Set(
+  val floats211: Set[String] = Set(
     "scala.this.Predef.floatWrapper",
     "scala.this.Predef.doubleWrapper")
+
+  object ForFloatWrapper extends ForRichWrappers {
+    val wrappers: Set[String] = mc.Macros.forVersion(floats)(floats211)
+    val unops: Set[String] = Set("abs", "ceil", "floor", "round")
+    val binops: Set[String] = Set("max", "min")
+  }
 }
