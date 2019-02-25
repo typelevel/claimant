@@ -1,5 +1,5 @@
 package claimant
-package scribes
+package scribe
 
 import scala.reflect.macros.blackbox.Context
 

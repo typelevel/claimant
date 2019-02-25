@@ -1,6 +1,5 @@
 package claimant
 
-import claimant.{scribes => s, tinkers => t}
 import org.scalacheck.Prop
 import scala.language.experimental.macros
 import scala.reflect.macros.blackbox.Context
@@ -44,16 +43,16 @@ object Claim {
    */
   val sys: System = {
     val tinkers: List[Tinker] =
-      t.ForBooleanOps ::
-      t.ForTypeClasses ::
-      t.ForAdHoc ::
+      tinker.ForBooleanOps ::
+      tinker.ForTypeClasses ::
+      tinker.ForAdHoc ::
       Nil
 
     val scribes: List[Scribe] =
-      s.ForRichWrappers.ForIntWrapper ::
-      s.ForRichWrappers.ForFloatWrapper ::
-      s.ForComparators ::
-      s.ForCollections ::
+      scribe.ForRichWrappers.ForIntWrapper ::
+      scribe.ForRichWrappers.ForFloatWrapper ::
+      scribe.ForComparators ::
+      scribe.ForCollections ::
       Nil
 
     System(tinkers, scribes)
@@ -68,7 +67,8 @@ object Claim {
    *
    * Claims returns by this method are always Simple claims.
    */
-  def apply(res: Boolean, msg: String): Claim = Simple(res, msg)
+  def apply(res: Boolean, msg: String): Claim =
+    Simple(res, msg)
 
   /**
    * ADT members follow. Other than Simple, these are all
@@ -110,7 +110,8 @@ sealed abstract class Claim(val res: Boolean) {
   /**
    * Negate this claim, requiring it to be false.
    */
-  def unary_! : Claim = Not(this)
+  def unary_! : Claim =
+    Not(this)
 
   /**
    * Combine two claims, requiring both to be true.

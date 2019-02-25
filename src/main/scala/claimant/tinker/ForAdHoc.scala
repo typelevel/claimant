@@ -1,5 +1,5 @@
 package claimant
-package tinkers
+package tinker
 
 import scala.reflect.macros.blackbox.Context
 
