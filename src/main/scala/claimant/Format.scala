@@ -16,32 +16,43 @@ import scala.reflect.macros.blackbox.Context
 object Format {
 
   // appends {value} to the string
-  def addValue(c: Context)(s: c.Tree, value: Option[c.Tree]): c.Tree = {
+  def addValue(c: Context, sys: System)(s: c.Tree, value: Option[c.Tree]): c.Tree = {
     import c.universe._
-    value.fold(s)(in => q"""$s + " {" + $in.toString + "}"""")
+    value.fold(s) { in =>
+      val sin = sys.str(c)(in)
+      q"""$s + " {" + $sin + "}""""
+    }
   }
 
   // shape: x.method
-  def str1(c: Context)(x: c.Tree, method: String, value: Option[c.Tree]): c.Tree = {
+  def str1(c: Context, sys: System)(x: c.Tree, method: String, value: Option[c.Tree]): c.Tree = {
     import c.universe._
-    addValue(c)(q"""$x.toString + "." + $method""", value)
+    val sx = sys.str(c)(x)
+    addValue(c, sys)(q"""$sx + "." + $method""", value)
   }
 
   // shape: x op y
-  def str2(c: Context)(x: c.Tree, op: String, y: c.Tree, value: Option[c.Tree]): c.Tree = {
+  def str2(c: Context, sys: System)(x: c.Tree, op: String, y: c.Tree, value: Option[c.Tree]): c.Tree = {
     import c.universe._
-    addValue(c)(q"""$x.toString + " " + $op + " " + $y.toString""", value)
+    val sx = sys.str(c)(x)
+    val sy = sys.str(c)(y)
+    addValue(c, sys)(q"""$sx + " " + $op + " " + $sy""", value)
   }
 
   // shape: x.method(y)
-  def str1_1(c: Context)(x: c.Tree, method: String, y: c.Tree, value: Option[c.Tree]): c.Tree = {
+  def str1_1(c: Context, sys: System)(x: c.Tree, method: String, y: c.Tree, value: Option[c.Tree]): c.Tree = {
     import c.universe._
-    addValue(c)(q"""$x.toString + "." + $method + "(" + $y.toString + ")"""", value)
+    val sx = sys.str(c)(x)
+    val sy = sys.str(c)(y)
+    addValue(c, sys)(q"""$sx + "." + $method + "(" + $sy + ")"""", value)
   }
 
   // shape: o.method(x, y)
-  def str1_2(c: Context)(o: c.Tree, method: String, x: c.Tree, y: c.Tree, value: Option[c.Tree]): c.Tree = {
+  def str1_2(c: Context, sys: System)(o: c.Tree, method: String, x: c.Tree, y: c.Tree, value: Option[c.Tree]): c.Tree = {
     import c.universe._
-    addValue(c)(q"""$o.toString + "." + $method + "(" + $x.toString + ", " + $y.toString + ")"""", value)
+    val so = sys.str(c)(o)
+    val sx = sys.str(c)(x)
+    val sy = sys.str(c)(y)
+    addValue(c, sys)(q"""$so + "." + $method + "(" + $sx + ", " + $sy + ")"""", value)
   }
 }

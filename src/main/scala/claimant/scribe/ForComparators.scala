@@ -8,26 +8,26 @@ object ForComparators extends Scribe {
     import c.universe._
     input match {
       case q"($o).min($x, $y)" =>
-        Some(Format.str2(c)(x, "min", y, Some(input)))
+        Some(Format.str2(c, sys)(x, "min", y, Some(input)))
       case q"($o).max($x, $y)" =>
-        Some(Format.str2(c)(x, "max", y, Some(input)))
+        Some(Format.str2(c, sys)(x, "max", y, Some(input)))
       case q"($o).pmin($x, $y)" =>
-        Some(Format.str2(c)(x, "pmin", y, Some(input)))
+        Some(Format.str2(c, sys)(x, "pmin", y, Some(input)))
       case q"($o).pmax($x, $y)" =>
-        Some(Format.str2(c)(x, "pmax", y, Some(input)))
+        Some(Format.str2(c, sys)(x, "pmax", y, Some(input)))
       case q"($o).compare($x, $y)" =>
-        Some(Format.str1_2(c)(o, "compare", x, y, Some(input)))
+        Some(Format.str1_2(c, sys)(o, "compare", x, y, Some(input)))
       case q"($o).tryCompare($x, $y)" =>
-        Some(Format.str1_2(c)(o, "tryCompare", x, y, Some(input)))
+        Some(Format.str1_2(c, sys)(o, "tryCompare", x, y, Some(input)))
       case q"($o).partialCompare($x, $y)" =>
-        Some(Format.str1_2(c)(o, "partialCompare", x, y, Some(input)))
+        Some(Format.str1_2(c, sys)(o, "partialCompare", x, y, Some(input)))
 
       case q"($x).compare($y)" =>
-        Some(Format.str1_1(c)(x, "compare", y, Some(input)))
+        Some(Format.str1_1(c, sys)(x, "compare", y, Some(input)))
       case q"($x).compareTo($y)" =>
-        Some(Format.str1_1(c)(x, "compareTo", y, Some(input)))
+        Some(Format.str1_1(c, sys)(x, "compareTo", y, Some(input)))
       case q"scala.`package`.Ordering.Implicits.infixOrderingOps[$tpe]($x)($o)" =>
-        Some(q"""$x.toString""")
+        Some(sys.str(c)(x))
 
       case _ =>
         None

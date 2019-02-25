@@ -9,7 +9,11 @@ import scala.reflect.macros.blackbox.Context
  * describe how to label _any_ expression. Together we use them to
  * build labels for labeled Prop values.
  */
-case class System(tinkers: List[Tinker], scribes: List[Scribe]) { sys =>
+abstract class System { sys =>
+
+  def tinkers: List[Tinker]
+  def scribes: List[Scribe]
+  def str(c: Context)(t: c.Tree): c.Tree
 
   /**
    * System.deconstruct is where the magic happens.
@@ -29,7 +33,8 @@ case class System(tinkers: List[Tinker], scribes: List[Scribe]) { sys =>
     def loop(lst: List[Tinker]): c.Expr[Claim] =
       lst match {
         case Nil =>
-          c.Expr(q"_root_.claimant.Claim($e0, $e0.toString)")
+          val label = str(c)(e0.tree)
+          c.Expr(q"_root_.claimant.Claim($e0, $label)")
         case tinker :: rest =>
           tinker.deconstruct(c)(e0, sys) match {
             case Some(e1) => e1
@@ -47,11 +52,10 @@ case class System(tinkers: List[Tinker], scribes: List[Scribe]) { sys =>
    * expression as well as its result.
    */
   def annotate(c: Context)(input: c.Tree): c.Tree = {
-    import c.universe._
     def loop(lst: List[Scribe]): c.Tree =
       lst match {
         case Nil =>
-          q"$input.toString"
+          str(c)(input)
         case scribe :: rest =>
           scribe.annotate(c)(input, sys) match {
             case Some(t) => t
@@ -60,4 +64,24 @@ case class System(tinkers: List[Tinker], scribes: List[Scribe]) { sys =>
       }
     loop(scribes)
   }
+}
+
+object System {
+
+
+  /**
+   * Default system factory method.
+   *
+   * Builds using the given scribes and tinkers, using .toString to
+   * stringify values.
+   */
+  def apply(tinkers0: List[Tinker], scribes0: List[Scribe]): System =
+    new System {
+      def tinkers: List[Tinker] = tinkers0
+      def scribes: List[Scribe] = scribes0
+      def str(c: Context)(t: c.Tree): c.Tree = {
+        import c.universe._
+        q"$t.toString"
+      }
+    }
 }
