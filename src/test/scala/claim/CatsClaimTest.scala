@@ -50,15 +50,14 @@ object CatsClaimTest extends Properties("ClaimCatsTest") {
   property("(1 pmax 2) = None") =
     test(Claim((1 pmax 2) == None), "falsified: 1 pmax 2 {Some(2)} == None")
 
-  property("(1 min 2) = None") =
-    test(Claim((1 min 2) == 0), "falsified: 1 min 2 {1} == 0")
-
-  property("(1 max 2) = 0") =
-    test(Claim((1 max 2) == 0), "falsified: 1 max 2 {2} == 0")
-
-  property("(1 min 2) = 0") =
-    test(Claim((1 min 2) == 0), "falsified: 1 min 2 {1} == 0")
-
   property("List(1,2,3).size === 4") =
     test(Claim(List(1,2,3).size === 4), "falsified: List(1, 2, 3).size {3} === 4")
+
+  val (s1, s2) = (Option("cat"), Option("rat"))
+
+  property("s1 max s2 = s1") =
+    test(Claim((s1 max s2) == s1), "falsified: Some(cat) max Some(rat) {Some(rat)} == Some(cat)")
+
+  property("s1 min s2 = s2") =
+    test(Claim((s1 min s2) == s2), "falsified: Some(cat) min Some(rat) {Some(cat)} == Some(rat)")
 }

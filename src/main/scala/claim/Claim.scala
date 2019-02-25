@@ -50,7 +50,11 @@ object Claim {
       Nil
 
     val scribes: List[Scribe] =
+      s.ForByteWrapper ::
+      s.ForShortWrapper ::
       s.ForIntWrapper ::
+      s.ForLongWrapper ::
+      s.ForFloatWrapper ::
       s.ForDoubleWrapper ::
       s.ForComparators ::
       s.ForCollections ::

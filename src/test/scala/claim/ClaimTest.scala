@@ -157,4 +157,37 @@ object ClaimTest extends Properties("ClaimTest") {
 
   property("o.equiv(q1, q2)") =
     test(Claim(Qux.QuxOrdering.equiv(q1, q2)), "falsified: QuxOrdering.equiv(Qux(1), Qux(2))")
+
+  // RichInt
+
+  property("(1 min 2) = 0") =
+    test(Claim((1 min 2) == 0), "falsified: 1 min 2 {1} == 0")
+
+  property("(1 max 2) = 0") =
+    test(Claim((1 max 2) == 0), "falsified: 1 max 2 {2} == 0")
+
+  property("1.signum = 0") =
+    test(Claim(1.signum == 0), "falsified: 1.signum {1} == 0")
+
+  // RichDouble
+
+  val (z1, z2) = (1.0, 2.0)
+
+  property("z1.abs = 0") =
+    test(Claim(z1.abs == 0), s"falsified: $z1.abs {$z1} == 0")
+
+  property("z1.ceil = 0") =
+    test(Claim(z1.ceil == 0), s"falsified: $z1.ceil {$z1} == 0")
+
+  property("z1.floor = 0") =
+    test(Claim(z1.floor == 0), s"falsified: $z1.floor {$z1} == 0")
+
+  property("(z1 max z2) = 0") =
+    test(Claim((z1 max z2) == 0), s"falsified: $z1 max $z2 {$z2} == 0")
+
+  property("(z1 min z2) = 0") =
+    test(Claim((z1 min z2) == 0), s"falsified: $z1 min $z2 {$z1} == 0")
+
+  property("z1.round = 0") =
+    test(Claim(z1.round == 0), s"falsified: $z1.round {${z1.round}} == 0")
 }
