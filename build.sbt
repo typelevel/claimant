@@ -102,6 +102,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(mc)
   .settings(name := "claimant")
   .settings(claimantSettings: _*)
+  .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .jsSettings(
     scalaJSStage in Global := FastOptStage,
     parallelExecution := false,
