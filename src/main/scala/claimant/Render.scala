@@ -62,7 +62,7 @@ object Render extends RenderInstances {
   }
 }
 
-abstract class RenderInstances extends RenderTupleInstances {
+abstract class RenderInstances extends RenderTupleInstances with LowPriorityRenderInstances {
 
   // $COVERAGE-OFF$
   implicit lazy val renderForNothing: Render[Nothing] =
@@ -198,4 +198,8 @@ abstract class RenderInstances extends RenderTupleInstances {
       def renderInto(sb: StringBuilder, m: sci.LongMap[V]): StringBuilder =
         Render.renderIterator(sb, "LongMap", m.iterator, rnv)
     }
+}
+
+trait LowPriorityRenderInstances {
+  implicit def renderAnyRef[A <: AnyRef]: Render[A] = Render.str(_.toString)
 }

@@ -56,6 +56,23 @@ object RenderTest extends Properties("RenderTest") {
   test(List[Float](2.0F, 3.0F, 4.0F), "List(2.0, 3.0, 4.0)")
   test(List[Double](2.0, 3.0, 4.0), "List(2.0, 3.0, 4.0)")
 
+  // test fallback to toString
+
+  class Ugh { override def toString: String = "Ugh.toString" }
+  object Ugh { implicit val render: Render[Ugh] = Render.const("Ugh") }
+
+  case class Yes(u: Ugh)
+  object Yes { implicit val renderForYes: Render[Yes] = Render.caseClass }
+
+  case class Nope(u: Ugh)
+
+  test(Yes(new Ugh), "Yes(Ugh)")
+  test(Nope(new Ugh), "Nope(Ugh.toString)")
+  test((new Ugh, new Ugh), "(Ugh, Ugh)")
+  test(Array(new Ugh, new Ugh), "Array(Ugh, Ugh)")
+
+  // tuple tests
+
   test(Tuple1(1), "(1)")
   test((1, 2), "(1, 2)")
   test((1, 2, 3), "(1, 2, 3)")
@@ -78,4 +95,5 @@ object RenderTest extends Properties("RenderTest") {
   test((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), "(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)")
   test((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21), "(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21)")
   test((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22), "(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22)")
+
 }
