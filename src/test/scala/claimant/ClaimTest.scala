@@ -23,6 +23,8 @@ object ClaimTest extends Properties("ClaimTest") {
   val ys = Set(1, 2, 3)
   val zs = Map("foo" -> 1)
 
+  val arr = Array(2.0, 3.0, 4.0)
+
   case object Dummy {
     def isEmpty(): Boolean = false
   }
@@ -53,6 +55,9 @@ object ClaimTest extends Properties("ClaimTest") {
 
   property("x >= y") =
     test(Claim(x >= y), "falsified: 1 >= 2")
+
+  property("arr.length = 4") =
+    test(Claim(arr.length == 4), "falsified: Array(2.0, 3.0, 4.0).length {3} == 4")
 
   property("xs.size == 0") =
     test(Claim(xs.size == 0), "falsified: List(1, 2, 3, 4).size {4} == 0")
