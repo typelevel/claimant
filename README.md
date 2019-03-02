@@ -317,10 +317,8 @@ either version independently.
 
 There are a ton of possible improvements:
 
- * Support Cats' `Eq`, `PartialOrder`, and `Order`.
  * Support more methods/shapes.
  * Minimize recomputation in the macro.
- * Support using `Show` (or another type class) instead of `toString`.
  * Consider using raw trees instead of quasi-quotes.
  * Consider supporting fancy diagrams
  * Consider supporting color output
