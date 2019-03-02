@@ -24,9 +24,9 @@ object ForTypeClasses extends Tinker {
         val yy = sys.annotate(c)(y)
         val label = ops.get(method.toString).flatten match {
           case Some(op) =>
-            Format.str2(c)(xx, op, yy, None)
+            Format.str2(c, sys)(xx, op, yy, None)
           case None =>
-            Format.str1_2(c)(o, method.toString, xx, yy, None)
+            Format.str1_2(c, sys)(o, method.toString, xx, yy, None)
         }
         Some(c.Expr(q"_root_.claimant.Claim($t, $label)"))
 

@@ -8,26 +8,49 @@ object ForComparators extends Scribe {
     import c.universe._
     input match {
       case q"($o).min($x, $y)" =>
-        Some(Format.str2(c)(x, "min", y, Some(input)))
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str2(c, sys)(sx, "min", sy, Some(input)))
       case q"($o).max($x, $y)" =>
-        Some(Format.str2(c)(x, "max", y, Some(input)))
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str2(c, sys)(sx, "max", sy, Some(input)))
       case q"($o).pmin($x, $y)" =>
-        Some(Format.str2(c)(x, "pmin", y, Some(input)))
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str2(c, sys)(sx, "pmin", sy, Some(input)))
       case q"($o).pmax($x, $y)" =>
-        Some(Format.str2(c)(x, "pmax", y, Some(input)))
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str2(c, sys)(sx, "pmax", sy, Some(input)))
       case q"($o).compare($x, $y)" =>
-        Some(Format.str1_2(c)(o, "compare", x, y, Some(input)))
+        val so = sys.annotate(c)(o)
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str1_2(c, sys)(so, "compare", sx, sy, Some(input)))
       case q"($o).tryCompare($x, $y)" =>
-        Some(Format.str1_2(c)(o, "tryCompare", x, y, Some(input)))
+        val so = sys.annotate(c)(o)
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str1_2(c, sys)(so, "tryCompare", sx, sy, Some(input)))
       case q"($o).partialCompare($x, $y)" =>
-        Some(Format.str1_2(c)(o, "partialCompare", x, y, Some(input)))
+        val so = sys.annotate(c)(o)
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str1_2(c, sys)(so, "partialCompare", sx, sy, Some(input)))
 
       case q"($x).compare($y)" =>
-        Some(Format.str1_1(c)(x, "compare", y, Some(input)))
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str1_1(c, sys)(sx, "compare", sy, Some(input)))
       case q"($x).compareTo($y)" =>
-        Some(Format.str1_1(c)(x, "compareTo", y, Some(input)))
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str1_1(c, sys)(sx, "compareTo", sy, Some(input)))
+      case q"scala.Predef.augmentString($s)" =>
+        Some(sys.annotate(c)(s))
       case q"scala.`package`.Ordering.Implicits.infixOrderingOps[$tpe]($x)($o)" =>
-        Some(q"""$x.toString""")
+        Some(sys.annotate(c)(x))
 
       case _ =>
         None

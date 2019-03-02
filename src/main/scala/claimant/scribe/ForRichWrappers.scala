@@ -12,9 +12,12 @@ abstract class ForRichWrappers extends Scribe {
     import c.universe._
     input match {
       case q"$w($x).$m($y)" if wrappers(w.toString) && binops(m.toString) =>
-        Some(Format.str2(c)(x, m.toString, y, Some(input)))
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str2(c, sys)(sx, m.toString, sy, Some(input)))
       case q"$w($x).$m" if wrappers(w.toString) && unops(m.toString) =>
-        Some(Format.str1(c)(x, m.toString, Some(input)))
+        val sx = sys.annotate(c)(x)
+        Some(Format.str1(c, sys)(sx, m.toString, Some(input)))
       case _ =>
         None
     }

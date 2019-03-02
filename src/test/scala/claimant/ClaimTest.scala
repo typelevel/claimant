@@ -9,6 +9,8 @@ object Qux {
   implicit case object QuxOrdering extends Ordering[Qux] {
     def compare(x: Qux, y: Qux): Int = Integer.compare(x.n, y.n)
   }
+
+  implicit val renderForQux: Render[Qux] = Render.caseClass[Qux]
 }
 
 object ClaimTest extends Properties("ClaimTest") {
@@ -20,6 +22,8 @@ object ClaimTest extends Properties("ClaimTest") {
   val xs = List(1, 2, 3, 4)
   val ys = Set(1, 2, 3)
   val zs = Map("foo" -> 1)
+
+  val arr = Array(2.0, 3.0, 4.0)
 
   case object Dummy {
     def isEmpty(): Boolean = false
@@ -35,10 +39,10 @@ object ClaimTest extends Properties("ClaimTest") {
     test(Claim(x != x), "falsified: 1 != 1")
 
   property("s0 eq s1") =
-    test(Claim(s0 eq s1), "falsified: hello eq goodbye")
+    test(Claim(s0 eq s1), """falsified: "hello" eq "goodbye"""")
 
   property("s0 ne s0") =
-    test(Claim(s0 ne s0), "falsified: hello ne hello")
+    test(Claim(s0 ne s0), """falsified: "hello" ne "hello"""")
 
   property("x < x") =
     test(Claim(x < x), "falsified: 1 < 1")
@@ -52,6 +56,9 @@ object ClaimTest extends Properties("ClaimTest") {
   property("x >= y") =
     test(Claim(x >= y), "falsified: 1 >= 2")
 
+  property("arr.length = 4") =
+    test(Claim(arr.length == 4), "falsified: Array(2.0, 3.0, 4.0).length {3} == 4")
+
   property("xs.size == 0") =
     test(Claim(xs.size == 0), "falsified: List(1, 2, 3, 4).size {4} == 0")
 
@@ -59,16 +66,16 @@ object ClaimTest extends Properties("ClaimTest") {
     test(Claim(ys.size == 2), "falsified: Set(1, 2, 3).size {3} == 2")
 
   property("zs.size == 3") =
-    test(Claim(zs.size == 3), "falsified: Map(foo -> 1).size {1} == 3")
+    test(Claim(zs.size == 3), """falsified: Map("foo" -> 1).size {1} == 3""")
 
   property("xs.length == 0") =
     test(Claim(xs.length == 0), "falsified: List(1, 2, 3, 4).length {4} == 0")
 
   property("s0 compare s1") =
-    test(Claim((s0 compare s1) == 0), "falsified: hello.compare(goodbye) {1} == 0")
+    test(Claim((s0 compare s1) == 0), """falsified: "hello".compare("goodbye") {1} == 0""")
 
   property("s0 compareTo s1") =
-    test(Claim((s0 compareTo s1) == 0), "falsified: hello.compareTo(goodbye) {1} == 0")
+    test(Claim((s0 compareTo s1) == 0), """falsified: "hello".compareTo("goodbye") {1} == 0""")
 
   property("xs.lengthCompare(1) == 0") =
     test(Claim(xs.lengthCompare(1) == 0), "falsified: List(1, 2, 3, 4).lengthCompare(1) {1} == 0")
@@ -83,10 +90,10 @@ object ClaimTest extends Properties("ClaimTest") {
     test(Claim(ws.nonEmpty), "falsified: List().nonEmpty")
 
   property("hello.startsWith(Hell)") =
-    test(Claim(s0.startsWith("Hell")), "falsified: hello.startsWith(Hell)")
+    test(Claim(s0.startsWith("Hell")), """falsified: "hello".startsWith("Hell")""")
 
   property("hello.endsWith(Ello)") =
-    test(Claim(s0.endsWith("Ello")), "falsified: hello.endsWith(Ello)")
+    test(Claim(s0.endsWith("Ello")), """falsified: "hello".endsWith("Ello")""")
 
   property("xs.contains(99)") =
     test(Claim(xs.contains(99)), "falsified: List(1, 2, 3, 4).contains(99)")
@@ -190,4 +197,7 @@ object ClaimTest extends Properties("ClaimTest") {
 
   property("z1.round = 0") =
     test(Claim(z1.round == 0), s"falsified: $z1.round {${z1.round}} == 0")
+
+  property("claimant.slice(2, 4) = xyz") =
+    test(Claim("claimant".slice(2, 4) == "xyz"), """falsified: "ai" == "xyz"""")
 }

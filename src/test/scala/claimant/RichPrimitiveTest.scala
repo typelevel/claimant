@@ -5,7 +5,7 @@ import Test.test
 
 object RichPrimitiveTest extends Properties("RichPrimitiveTest") {
 
-  // RichShort
+  // RichByte
 
   val (b1, b2) = (1.toByte, 2.toByte)
 

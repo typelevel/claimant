@@ -25,7 +25,7 @@ object ForAdHoc extends Tinker {
 
     def unop(meth: TermName, x: c.Tree): c.Expr[Claim] = {
       val xx = sys.annotate(c)(x)
-      val label = Format.str1(c)(xx, meth.toString, None)
+      val label = Format.str1(c, sys)(xx, meth.toString, None)
       c.Expr(q"_root_.claimant.Claim($t, $label)")
     }
 
@@ -33,21 +33,21 @@ object ForAdHoc extends Tinker {
       val xx = sys.annotate(c)(x)
       val yy = sys.annotate(c)(y)
       val label: c.Tree = meth.toString match {
-        case "$eq$eq" => Format.str2(c)(xx, "==", yy, None)
-        case "$bang$eq" => Format.str2(c)(xx, "!=", yy, None)
-        case "eq" => Format.str2(c)(xx, "eq", yy, None)
-        case "ne" => Format.str2(c)(xx, "ne", yy, None)
+        case "$eq$eq" => Format.str2(c, sys)(xx, "==", yy, None)
+        case "$bang$eq" => Format.str2(c, sys)(xx, "!=", yy, None)
+        case "eq" => Format.str2(c, sys)(xx, "eq", yy, None)
+        case "ne" => Format.str2(c, sys)(xx, "ne", yy, None)
 
-        case "$less" => Format.str2(c)(xx, "<", yy, None)
-        case "$less$eq" => Format.str2(c)(xx, "<=", yy, None)
-        case "$greater" => Format.str2(c)(xx, ">", yy, None)
-        case "$greater$eq" => Format.str2(c)(xx, ">=", yy, None)
+        case "$less" => Format.str2(c, sys)(xx, "<", yy, None)
+        case "$less$eq" => Format.str2(c, sys)(xx, "<=", yy, None)
+        case "$greater" => Format.str2(c, sys)(xx, ">", yy, None)
+        case "$greater$eq" => Format.str2(c, sys)(xx, ">=", yy, None)
 
         case "exists" | "forall" =>
-          Format.str1(c)(xx, meth.toString + "(...)", None)
+          Format.str1(c, sys)(xx, meth.toString + "(...)", None)
 
         case _ =>
-          Format.str1_1(c)(xx, meth.toString, yy, None)
+          Format.str1_1(c, sys)(xx, meth.toString, yy, None)
       }
 
       c.Expr(q"_root_.claimant.Claim($t, $label)")
