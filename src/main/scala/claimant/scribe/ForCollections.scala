@@ -8,15 +8,21 @@ object ForCollections extends Scribe {
     import c.universe._
     input match {
       case q"($x).size" =>
-        Some(Format.str1(c, sys)(x, "size", Some(input)))
+        val sx = sys.annotate(c)(x)
+        Some(Format.str1(c, sys)(sx, "size", Some(input)))
       case q"($x).length" =>
-        Some(Format.str1(c, sys)(x, "length", Some(input)))
+        val sx = sys.annotate(c)(x)
+        Some(Format.str1(c, sys)(sx, "length", Some(input)))
       case q"($x).lengthCompare($y)" =>
-        Some(Format.str1_1(c, sys)(x, "lengthCompare", y, Some(input)))
+        val sx = sys.annotate(c)(x)
+        val sy = sys.annotate(c)(y)
+        Some(Format.str1_1(c, sys)(sx, "lengthCompare", sy, Some(input)))
       case q"($x).min[$tpe]($o)" =>
-        Some(Format.str1(c, sys)(x, "min", Some(input)))
+        val sx = sys.annotate(c)(x)
+        Some(Format.str1(c, sys)(sx, "min", Some(input)))
       case q"($x).max[$tpe]($o)" =>
-        Some(Format.str1(c, sys)(x, "max", Some(input)))
+        val sx = sys.annotate(c)(x)
+        Some(Format.str1(c, sys)(sx, "max", Some(input)))
       case _ =>
         None
     }

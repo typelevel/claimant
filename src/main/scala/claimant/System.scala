@@ -38,7 +38,7 @@ abstract class System { sys =>
     def loop(lst: List[Tinker]): c.Expr[Claim] =
       lst match {
         case Nil =>
-          val label = tostr(c)(e0.tree)
+          val label = annotate(c)(e0.tree)
           c.Expr(q"_root_.claimant.Claim($e0, $label)")
         case tinker :: rest =>
           tinker.deconstruct(c)(e0, sys) match {
@@ -60,7 +60,7 @@ abstract class System { sys =>
     def loop(lst: List[Scribe]): c.Tree =
       lst match {
         case Nil =>
-          tostr(c)(input)
+          render(c)(input)
         case scribe :: rest =>
           scribe.annotate(c)(input, sys) match {
             case Some(t) => t

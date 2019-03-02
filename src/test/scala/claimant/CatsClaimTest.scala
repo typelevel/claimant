@@ -12,6 +12,7 @@ object Height {
   implicit case object OrderForHeight extends cats.Order[Height] {
     def compare(x: Height, y: Height): Int = Integer.compare(x.n, y.n)
   }
+  implicit val renderForHeight: Render[Height] = Render.caseClass[Height]
 }
 
 object CatsClaimTest extends Properties("CatsClaimTest") {
@@ -56,8 +57,8 @@ object CatsClaimTest extends Properties("CatsClaimTest") {
   val (s1, s2) = (Option("cat"), Option("rat"))
 
   property("s1 max s2 = s1") =
-    test(Claim((s1 max s2) == s1), "falsified: Some(cat) max Some(rat) {Some(rat)} == Some(cat)")
+    test(Claim((s1 max s2) == s1), """falsified: Some("cat") max Some("rat") {Some("rat")} == Some("cat")""")
 
   property("s1 min s2 = s2") =
-    test(Claim((s1 min s2) == s2), "falsified: Some(cat) min Some(rat) {Some(cat)} == Some(rat)")
+    test(Claim((s1 min s2) == s2), """falsified: Some("cat") min Some("rat") {Some("cat")} == Some("rat")""")
 }

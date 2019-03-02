@@ -19,7 +19,7 @@ object Format {
   def addValue(c: Context, sys: System)(s: c.Tree, value: Option[c.Tree]): c.Tree = {
     import c.universe._
     value.fold(s) { in =>
-      val sin = sys.tostr(c)(in)
+      val sin = sys.render(c)(in)
       q"""$s + " {" + $sin + "}""""
     }
   }
@@ -27,8 +27,7 @@ object Format {
   // shape: x.method
   def str1(c: Context, sys: System)(x: c.Tree, method: String, value: Option[c.Tree]): c.Tree = {
     import c.universe._
-    val sx = sys.tostr(c)(x)
-    addValue(c, sys)(q"""$sx + "." + $method""", value)
+    addValue(c, sys)(q"""$x + "." + $method""", value)
   }
 
   // shape: x op y
