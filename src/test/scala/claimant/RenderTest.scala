@@ -53,8 +53,8 @@ object RenderTest extends Properties("RenderTest") {
   test(List[Short](2, 3, 4), "List(2, 3, 4)")
   test(List[Int](2, 3, 4), "List(2, 3, 4)")
   test(List[Long](2L, 3L, 4L), "List(2, 3, 4)")
-  test(List[Float](2.0F, 3.0F, 4.0F), "List(2.0, 3.0, 4.0)")
-  test(List[Double](2.0, 3.0, 4.0), "List(2.0, 3.0, 4.0)")
+  test(List[Float](2.0F, 3.0F, 4.0F), s"List(${2.0F}, ${3.0F}, ${4.0F})")
+  test(List[Double](2.0, 3.0, 4.0), s"List(${2.0}, ${3.0}, ${4.0})")
 
   // test fallback to toString
 

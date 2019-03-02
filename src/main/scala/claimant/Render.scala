@@ -2,6 +2,7 @@ package claimant
 
 import claimant.render.CaseClass
 import scala.{collection => sc}
+import scala.annotation.switch
 import scala.collection.{immutable => sci}
 import scala.collection.{mutable => scm}
 
@@ -154,19 +155,60 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
   implicit lazy val renderForJavaBigDecimal: Render[java.math.BigDecimal] =
     Render.str(_.toString)
 
-  implicit lazy val renderForChar: Render[Char] =
-    Render.str { c =>
-      import scala.reflect.runtime.universe._
-      // Literal(Constant(_)).toString handles quoting/escaping
-      Literal(Constant(c)).toString
+  // escape a String in the same way scalac does.
+  //
+  // these rules are extracted from scala.reflect.internal.Constants,
+  // which are not accessible to us due to the Cake pattern.
+  def escapedChar(c: Char): String = {
+    (c: @switch) match {
+      case '\b' => "\\b"
+      case '\t' => "\\t"
+      case '\n' => "\\n"
+      case '\f' => "\\f"
+      case '\r' => "\\r"
+      case '"'  => "\\\""
+      case '\'' => "\\\'"
+      case '\\' => "\\\\"
+      case _ if (c.isControl) => "\\u%04X".format(c.toInt)
+      case _ => String.valueOf(c)
     }
+  }
+
+  /**
+   * Display an escaped representation of the given Char.
+   *
+   * Will return a value surrounded by single-quotes.
+   */
+  def escape(c: Char): String = {
+    val sb = new StringBuilder
+    sb.append("'")
+    sb.append(escapedChar(c))
+    sb.append("'")
+    sb.toString
+  }
+
+  /**
+   * Display an escaped representation of the given String.
+   *
+   * Will return a value surrounded by double-quotes.
+   */
+  def escape(s: String): String = {
+    val sb = new StringBuilder
+    sb.append("\"")
+    var i = 0
+    while (i < s.length) {
+      sb.append(escapedChar(s.charAt(i)))
+      i += 1
+    }
+    sb.append("\"")
+    sb.toString
+  }
+
+  implicit lazy val renderForChar: Render[Char] =
+    Render.str(escape)
 
   implicit lazy val renderForString: Render[String] =
-    Render.str{ s =>
-      import scala.reflect.runtime.universe._
-      // Literal(Constant(_)).toString handles quoting/escaping
-      Literal(Constant(s)).toString
-    }
+    Render.str(escape)
 
   implicit lazy val renderForSymbol: Render[scala.Symbol] =
     Render.str(_.toString)

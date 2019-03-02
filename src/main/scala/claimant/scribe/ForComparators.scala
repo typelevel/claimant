@@ -6,6 +6,12 @@ import scala.reflect.macros.blackbox.Context
 object ForComparators extends Scribe {
   def annotate(c: Context)(input: c.Tree, sys: System): Option[c.Tree] = {
     import c.universe._
+
+    val augmentString: String = {
+      val prefix = mc.Macros.forVersion("scala")("scala.this")
+      s"$prefix.Predef.augmentString"
+    }
+
     input match {
       case q"($o).min($x, $y)" =>
         val sx = sys.annotate(c)(x)
@@ -47,10 +53,10 @@ object ForComparators extends Scribe {
         val sx = sys.annotate(c)(x)
         val sy = sys.annotate(c)(y)
         Some(Format.str1_1(c, sys)(sx, "compareTo", sy, Some(input)))
-      case q"scala.Predef.augmentString($s)" =>
-        Some(sys.annotate(c)(s))
       case q"scala.`package`.Ordering.Implicits.infixOrderingOps[$tpe]($x)($o)" =>
         Some(sys.annotate(c)(x))
+      case q"$meth($s)" if meth.toString == augmentString =>
+        Some(sys.annotate(c)(s))
 
       case _ =>
         None
