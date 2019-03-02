@@ -13,7 +13,12 @@ abstract class System { sys =>
 
   def tinkers: List[Tinker]
   def scribes: List[Scribe]
-  def str(c: Context)(t: c.Tree): c.Tree
+  def render(c: Context)(t: c.Tree): c.Tree
+
+  final def tostr(c: Context)(t: c.Tree): c.Tree = {
+    import c.universe._
+    q"$t.toString"
+  }
 
   /**
    * System.deconstruct is where the magic happens.
@@ -33,7 +38,7 @@ abstract class System { sys =>
     def loop(lst: List[Tinker]): c.Expr[Claim] =
       lst match {
         case Nil =>
-          val label = str(c)(e0.tree)
+          val label = tostr(c)(e0.tree)
           c.Expr(q"_root_.claimant.Claim($e0, $label)")
         case tinker :: rest =>
           tinker.deconstruct(c)(e0, sys) match {
@@ -55,7 +60,7 @@ abstract class System { sys =>
     def loop(lst: List[Scribe]): c.Tree =
       lst match {
         case Nil =>
-          str(c)(input)
+          tostr(c)(input)
         case scribe :: rest =>
           scribe.annotate(c)(input, sys) match {
             case Some(t) => t
@@ -68,7 +73,6 @@ abstract class System { sys =>
 
 object System {
 
-
   /**
    * Default system factory method.
    *
@@ -79,9 +83,9 @@ object System {
     new System {
       def tinkers: List[Tinker] = tinkers0
       def scribes: List[Scribe] = scribes0
-      def str(c: Context)(t: c.Tree): c.Tree = {
+      def render(c: Context)(t: c.Tree): c.Tree = {
         import c.universe._
-        q"$t.toString"
+        q"_root_.claimant.Render.render($t)"
       }
     }
 }

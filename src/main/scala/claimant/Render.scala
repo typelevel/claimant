@@ -23,6 +23,8 @@ object Render extends RenderInstances {
    */
   def apply[A](implicit ev: Render[A]): Render[A] = ev
 
+  def render[A](a: A)(implicit ev: Render[A]): String = ev.render(a)
+
   /**
    *
    */
@@ -201,5 +203,5 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
 }
 
 trait LowPriorityRenderInstances {
-  implicit def renderAnyRef[A <: AnyRef]: Render[A] = Render.str(_.toString)
+  implicit def renderAnyRef[A]: Render[A] = Render.str(_.toString)
 }

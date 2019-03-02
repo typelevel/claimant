@@ -27,7 +27,7 @@ object ForComparators extends Scribe {
       case q"($x).compareTo($y)" =>
         Some(Format.str1_1(c, sys)(x, "compareTo", y, Some(input)))
       case q"scala.`package`.Ordering.Implicits.infixOrderingOps[$tpe]($x)($o)" =>
-        Some(sys.str(c)(x))
+        Some(sys.tostr(c)(x))
 
       case _ =>
         None
