@@ -151,6 +151,44 @@ which it will attempt to annotate, such as:
 It should be fairly straightforward to extend this to support other
 shapes, both for `Boolean` expressions and for general annotations.
 
+### Representation and formatting
+
+Claimant uses its own `Render[A]` typeclass to produce human-readable
+representations of values. We get a number of benefits from this:
+
+  1. We can provide a more useful representation of arrays than you
+     would get with `.toString`.
+  2. We can quote and escape `String` and `Char` values to make it
+     easier to see their exact value.
+  3. We support user-provided display strategies for types they don't
+     control.
+  4. We support all of the above recursively, allowing collections,
+     tuples, case classes, etc. to take advantage of all of these
+     together.
+
+For types that don't have their own `Render` instances, Claimant will
+use a low-priority implicit value to provide an implementation based
+on `.toString`. Some attempt has been made to provide implementations
+for most built-in Scala types, but PRs adding support for new
+instances (along with tests exercising them) will be gladly accepted.
+
+In particular, Claimant makes it easy to define `Render`
+implementations for case classes. Simply do the following:
+
+```scala
+case class MyClass(...)
+
+object MyClass {
+  implicit val renderForMyClass: Render[MyClass] =
+    Render.caseClass[MyClass]
+}
+```
+
+The code above will define a render instance for `MyClass` which will
+render each of its fields with its corresponding instances. (In the
+future Claimant may use Shapeless to derive `Render` instances
+automatically.)
+
 ### Purity
 
 Currently `Claim(...)` will potentially evaluate its expression (or
