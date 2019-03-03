@@ -56,6 +56,11 @@ object RenderTest extends Properties("RenderTest") {
   test(List[Float](2.0F, 3.0F, 4.0F), s"List(${2.0F}, ${3.0F}, ${4.0F})")
   test(List[Double](2.0, 3.0, 4.0), s"List(${2.0}, ${3.0}, ${4.0})")
 
+  // test escapes
+  test("these are escapes: \b \t \n \f \r \" \\ \u0001 ok we're done", "\"these are escapes: \\b \\t \\n \\f \\r \\\" \\\\ \\u0001 ok we're done\"")
+  test('a', "'a'")
+  test('\'', "'\\''")
+
   // test fallback to toString
 
   class Ugh { override def toString: String = "Ugh.toString" }

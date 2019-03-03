@@ -158,7 +158,9 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
   // escape a String in the same way scalac does.
   //
   // these rules are extracted from scala.reflect.internal.Constants,
-  // which are not accessible to us due to the Cake pattern.
+  // which are not accessible to us due to the Cake pattern. they are
+  // modified slightly so that we only escape single-quotes (') in
+  // characters, not strings.
   def escapedChar(c: Char): String = {
     (c: @switch) match {
       case '\b' => "\\b"
@@ -167,7 +169,6 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
       case '\f' => "\\f"
       case '\r' => "\\r"
       case '"'  => "\\\""
-      case '\'' => "\\\'"
       case '\\' => "\\\\"
       case _ if (c.isControl) => "\\u%04X".format(c.toInt)
       case _ => String.valueOf(c)
@@ -179,13 +180,16 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
    *
    * Will return a value surrounded by single-quotes.
    */
-  def escape(c: Char): String = {
-    val sb = new StringBuilder
-    sb.append("'")
-    sb.append(escapedChar(c))
-    sb.append("'")
-    sb.toString
-  }
+  def escape(c: Char): String =
+    if (c == '\'') {
+      "'\\''"
+    } else {
+      val sb = new StringBuilder
+      sb.append("'")
+      sb.append(escapedChar(c))
+      sb.append("'")
+      sb.toString
+    }
 
   /**
    * Display an escaped representation of the given String.
