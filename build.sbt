@@ -4,7 +4,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 lazy val claimantSettings = Seq(
   organization := "org.spire-math",
   scalaVersion := "2.12.6",
-  crossScalaVersions := Seq("2.11.12", "2.12.6"),
+  crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0-M5"),
   libraryDependencies ++=
     "org.scala-lang" % "scala-reflect" % scalaVersion.value ::
     "org.scalacheck" %%% "scalacheck" % "1.14.0" ::
@@ -19,9 +19,8 @@ lazy val claimantSettings = Seq(
     "-language:implicitConversions" ::
     "-language:experimental.macros" ::
     "-unchecked" ::
-    "-Xfatal-warnings" ::
+    //"-Xfatal-warnings" :: // kind of brutal in 2.13
     "-Xlint" ::
-    "-Yno-adapted-args" ::
     "-Ywarn-dead-code" ::
     "-Ywarn-numeric-widen" ::
     "-Ywarn-value-discard" ::

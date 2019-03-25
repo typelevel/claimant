@@ -1,7 +1,6 @@
 package claimant
 package mc
 
-import scala.language.experimental.macros
 import scala.reflect.macros.blackbox.Context
 import scala.util.Properties
 

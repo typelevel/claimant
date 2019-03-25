@@ -1,7 +1,6 @@
 package claimant
 
 import org.scalacheck.Prop
-import scala.language.experimental.macros
 import scala.reflect.macros.blackbox.Context
 
 object Claim {
