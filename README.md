@@ -21,20 +21,21 @@ property fails, ScalaCheck will show you this label.
 
 ### Quick Start
 
-Claimant supports Scala 2.11 and 2.12, and is available from Sonatype.
+Claimant supports Scala 2.11, 2.12, and 2.13.0-M5 -- it is available
+from Sonatype.
 
 To include Claimant in your projects, you can use the following
 `build.sbt` snippet:
 
 ```scala
-libraryDependencies += "org.spire-math" %% "claimant" % "0.0.3"
+libraryDependencies += "org.spire-math" %% "claimant" % "0.0.4"
 ```
 
 Claimant also supports Scala.js. To use Claimant in your Scala.js
 projects, include the following `build.sbt` snippet:
 
 ```scala
-libraryDependencies += "org.spire-math" %%% "claimant" % "0.0.3"
+libraryDependencies += "org.spire-math" %%% "claimant" % "0.0.4"
 ```
 
 **Please note** that Claimant is still a very young project. While we
