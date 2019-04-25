@@ -330,6 +330,6 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
  * Render to recursively display any of its member values, even those
  * that have Render instances.
  */
-trait LowPriorityRenderInstances {
+private[claimant] trait LowPriorityRenderInstances {
   implicit def renderAnyRef[A]: Render[A] = Render.str(_.toString)
 }
