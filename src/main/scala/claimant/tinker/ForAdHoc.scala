@@ -1,4 +1,4 @@
-package claimant
+package org.typelevel.claimant
 package tinker
 
 import scala.reflect.macros.blackbox.Context
@@ -26,7 +26,7 @@ object ForAdHoc extends Tinker {
     def unop(meth: TermName, x: c.Tree): c.Expr[Claim] = {
       val xx = sys.annotate(c)(x)
       val label = Format.str1(c, sys)(xx, meth.toString, None)
-      c.Expr(q"_root_.claimant.Claim($t, $label)")
+      c.Expr(q"_root_.org.typelevel.claimant.Claim($t, $label)")
     }
 
     def binop(meth: TermName, x: c.Tree, y: c.Tree): c.Expr[Claim] = {
@@ -50,7 +50,7 @@ object ForAdHoc extends Tinker {
           Format.str1_1(c, sys)(xx, meth.toString, yy, None)
       }
 
-      c.Expr(q"_root_.claimant.Claim($t, $label)")
+      c.Expr(q"_root_.org.typelevel.claimant.Claim($t, $label)")
     }
 
     t match {

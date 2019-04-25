@@ -1,6 +1,6 @@
-package claimant
+package org.typelevel.claimant
 
-import claimant.render.CaseClass
+import org.typelevel.claimant.render.CaseClass
 import scala.{collection => sc}
 import scala.annotation.switch
 import scala.collection.{immutable => sci}

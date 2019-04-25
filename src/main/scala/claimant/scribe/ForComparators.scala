@@ -1,4 +1,4 @@
-package claimant
+package org.typelevel.claimant
 package scribe
 
 import scala.reflect.macros.blackbox.Context
