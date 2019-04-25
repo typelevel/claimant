@@ -325,6 +325,13 @@ There are a ton of possible improvements:
  * Consider supporting color output
  * Consider an extensible/modular design
 
+### Community
+
+People are expected to follow the
+[Scala Code of Conduct](https://scala-lang.org/conduct/) when
+discussing Claimant on GitHub, the Gitter channel, or other
+venues.
+
 ### Credits
 
 This library was inspired by the `assert(...)` macro found in
