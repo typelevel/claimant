@@ -1,4 +1,4 @@
-package claimant
+package org.typelevel.claimant
 package render
 
 import scala.reflect.macros.blackbox.Context
@@ -24,7 +24,7 @@ object CaseClass {
 
       val evs = fields.zipWithIndex.map { case (m, i) =>
         val ev = TermName(s"ev$i")
-        q"private val $ev = _root_.claimant.Render[${m.returnType}]"
+        q"private val $ev = _root_.org.typelevel.claimant.Render[${m.returnType}]"
       }
 
       val stmts = fields.zipWithIndex.flatMap { case (m, i) =>
@@ -34,7 +34,7 @@ object CaseClass {
       }
 
       c.Expr(q"""
-new _root_.claimant.Render[$A] {
+new _root_.org.typelevel.claimant.Render[$A] {
 
   ..$evs
 

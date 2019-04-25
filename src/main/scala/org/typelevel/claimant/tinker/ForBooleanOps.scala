@@ -1,4 +1,4 @@
-package claimant
+package org.typelevel.claimant
 package tinker
 
 import scala.reflect.macros.blackbox.Context

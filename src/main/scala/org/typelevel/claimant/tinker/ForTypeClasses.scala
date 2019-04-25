@@ -1,4 +1,4 @@
-package claimant
+package org.typelevel.claimant
 package tinker
 
 import scala.reflect.macros.blackbox.Context
@@ -28,7 +28,7 @@ object ForTypeClasses extends Tinker {
           case None =>
             Format.str1_2(c, sys)(o, method.toString, xx, yy, None)
         }
-        Some(c.Expr(q"_root_.claimant.Claim($t, $label)"))
+        Some(c.Expr(q"_root_.org.typelevel.claimant.Claim($t, $label)"))
 
       // fall-through
       case _ =>

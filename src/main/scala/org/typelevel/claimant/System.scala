@@ -1,4 +1,4 @@
-package claimant
+package org.typelevel.claimant
 
 import scala.reflect.macros.blackbox.Context
 
@@ -39,7 +39,7 @@ abstract class System { sys =>
       lst match {
         case Nil =>
           val label = annotate(c)(e0.tree)
-          c.Expr(q"_root_.claimant.Claim($e0, $label)")
+          c.Expr(q"_root_.org.typelevel.claimant.Claim($e0, $label)")
         case tinker :: rest =>
           tinker.deconstruct(c)(e0, sys) match {
             case Some(e1) => e1
@@ -85,7 +85,7 @@ object System {
       def scribes: List[Scribe] = scribes0
       def render(c: Context)(t: c.Tree): c.Tree = {
         import c.universe._
-        q"_root_.claimant.Render.render($t)"
+        q"_root_.org.typelevel.claimant.Render.render($t)"
       }
     }
 }

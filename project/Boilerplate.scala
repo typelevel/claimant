@@ -127,11 +127,11 @@ object Boilerplate {
   object GenTupleInstances extends Template {
     override def range: IndexedSeq[Int] = 1 to maxArity
 
-    def filename(root: File): File = root / "claimant" / "RenderTupleInstances.scala"
+    def filename(root: File): File = root / "org" / "typelevel" / "claimant" / "RenderTupleInstances.scala"
 
     val preBody: String =
       block"""
-         package claimant
+         package org.typelevel.claimant
      """
 
     def instances: Seq[InstanceDef] =

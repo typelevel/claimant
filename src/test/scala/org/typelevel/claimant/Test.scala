@@ -1,4 +1,4 @@
-package claimant
+package org.typelevel.claimant
 
 import org.scalacheck.{Gen, Prop}
 

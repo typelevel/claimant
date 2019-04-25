@@ -1,4 +1,4 @@
-package claimant
+package org.typelevel.claimant
 package mc
 
 import scala.reflect.macros.blackbox.Context
