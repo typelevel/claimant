@@ -137,7 +137,7 @@ object Boilerplate {
     def instances: Seq[InstanceDef] =
       Seq(
         InstanceDef(
-          "abstract class RenderTupleInstances {",
+          "private[claimant] abstract class RenderTupleInstances {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
