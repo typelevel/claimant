@@ -38,7 +38,7 @@ new _root_.claimant.Render[$A] {
 
   ..$evs
 
-  def renderInto(sb: StringBuilder, a: $A): StringBuilder = {
+  def renderInto(sb: _root_.scala.collection.mutable.StringBuilder, a: $A): _root_.scala.collection.mutable.StringBuilder = {
     sb.append($name)
     sb.append("(")
     ..$stmts
