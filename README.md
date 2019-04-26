@@ -21,21 +21,21 @@ property fails, ScalaCheck will show you this label.
 
 ### Quick Start
 
-Claimant supports Scala 2.11, 2.12, and 2.13.0-M5 -- it is available
+Claimant supports Scala 2.11, 2.12, and 2.13.0-RC1 -- it is available
 from Sonatype.
 
 To include Claimant in your projects, you can use the following
 `build.sbt` snippet:
 
 ```scala
-libraryDependencies += "org.spire-math" %% "claimant" % "0.0.4"
+libraryDependencies += "org.typelevel" %% "claimant" % "0.1.0"
 ```
 
 Claimant also supports Scala.js. To use Claimant in your Scala.js
 projects, include the following `build.sbt` snippet:
 
 ```scala
-libraryDependencies += "org.spire-math" %%% "claimant" % "0.0.4"
+libraryDependencies += "org.typelevel" %%% "claimant" % "0.1.0"
 ```
 
 **Please note** that Claimant is still a very young project. While we
@@ -52,8 +52,8 @@ is associative:
 ```scala
 package mytest
 
-import claimant.Claim
 import org.scalacheck.{Prop, Properties}
+import org.typelevel.claimant.Claim
 
 object MyTest extends Properties("MyTest") {
   property("float is associative") =
@@ -92,8 +92,8 @@ either `n` is zero, or that `n` is not equal to `-n`.
 ```scala
 package mytest
 
-import claimant.Claim
 import org.scalacheck.{Prop, Properties}
+import org.typelevel.claimant.Claim
 
 object AnotherTest extends Properties("AnotherTest") {
   property("ints have distinct inverses") = {
