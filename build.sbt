@@ -24,8 +24,15 @@ lazy val claimantSettings = Seq(
     "-Ywarn-dead-code" ::
     "-Ywarn-numeric-widen" ::
     "-Ywarn-value-discard" ::
-    "-Xfuture" ::
     Nil,
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v <= 12 =>
+        Seq("-Xfuture")
+      case _ =>
+        Nil
+    }
+  },
   // HACK: without these lines, the console is basically unusable,
   // since all imports are reported as being unused (and then become
   // fatal errors).
