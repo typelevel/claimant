@@ -8,7 +8,6 @@ lazy val claimantSettings = Seq(
   libraryDependencies ++=
     "org.scala-lang" % "scala-reflect" % scalaVersion.value ::
     "org.scalacheck" %%% "scalacheck" % "1.14.0" ::
-    "org.typelevel" %%% "cats-core" % "2.0.0-M1"  % "test" ::
     Nil,
   scalacOptions ++=
     "-deprecation" ::
