@@ -106,7 +106,7 @@ lazy val mcJS = mc.js
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
-  .in(file("."))
+  .in(file("core"))
   .dependsOn(mc)
   .settings(name := "claimant")
   .settings(claimantSettings: _*)
@@ -120,4 +120,3 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
 lazy val coreJVM = core.jvm
 
 lazy val coreJS = core.js
-
