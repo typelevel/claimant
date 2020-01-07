@@ -18,7 +18,7 @@ object ForBooleanOps extends Tinker {
         Some(c.Expr(method.toString match {
           case "$amp$amp" | "$amp" => q"$xx & $yy"
           case "$bar$bar" | "$bar" => q"$xx | $yy"
-          case "$up" => q"$xx ^ $yy"
+          case "$up"               => q"$xx ^ $yy"
         }))
       case _ =>
         None

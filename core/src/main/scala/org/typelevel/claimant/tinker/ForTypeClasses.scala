@@ -6,14 +6,13 @@ import scala.reflect.macros.blackbox.Context
 object ForTypeClasses extends Tinker {
 
   val ops: Map[String, Option[String]] =
-    Map(
-      "equiv" -> None,
-      "eqv" -> Some("==="),
-      "neqv" -> Some("=!="),
-      "lt" -> Some("<"),
-      "lteqv" -> Some("<="),
-      "gt" -> Some(">"),
-      "gteqv" -> Some(">="))
+    Map("equiv" -> None,
+        "eqv" -> Some("==="),
+        "neqv" -> Some("=!="),
+        "lt" -> Some("<"),
+        "lteqv" -> Some("<="),
+        "gt" -> Some(">"),
+        "gteqv" -> Some(">="))
 
   def deconstruct(c: Context)(e0: c.Expr[Boolean], sys: System): Option[c.Expr[Claim]] = {
     import c.universe._

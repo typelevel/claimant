@@ -43,16 +43,16 @@ object Claim {
   val sys: System = {
     val tinkers: List[Tinker] =
       tinker.ForBooleanOps ::
-      tinker.ForTypeClasses ::
-      tinker.ForAdHoc ::
-      Nil
+        tinker.ForTypeClasses ::
+        tinker.ForAdHoc ::
+        Nil
 
     val scribes: List[Scribe] =
       scribe.ForRichWrappers.ForIntWrapper ::
-      scribe.ForRichWrappers.ForFloatWrapper ::
-      scribe.ForComparators ::
-      scribe.ForCollections ::
-      Nil
+        scribe.ForRichWrappers.ForFloatWrapper ::
+        scribe.ForComparators ::
+        scribe.ForCollections ::
+        Nil
 
     System(tinkers, scribes)
   }
@@ -73,7 +73,6 @@ object Claim {
    * ADT members follow. Other than Simple, these are all
    * recursively-defined.
    */
-
   case class Simple(b: Boolean, msg: String) extends Claim(b)
   case class And(lhs: Claim, rhs: Claim) extends Claim(lhs.res && rhs.res)
   case class Or(lhs: Claim, rhs: Claim) extends Claim(lhs.res || rhs.res)
@@ -94,7 +93,7 @@ object Claim {
  */
 sealed abstract class Claim(val res: Boolean) {
 
-  import Claim.{Simple, Not, And, Or, Xor}
+  import Claim.{And, Not, Or, Simple, Xor}
 
   /**
    * Build a ScalaCheck Prop value from a claim.

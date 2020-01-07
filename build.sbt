@@ -7,23 +7,23 @@ lazy val claimantSettings = Seq(
   crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0"),
   libraryDependencies ++=
     "org.scala-lang" % "scala-reflect" % scalaVersion.value ::
-    "org.scalacheck" %%% "scalacheck" % "1.14.3" ::
-    Nil,
+      "org.scalacheck" %%% "scalacheck" % "1.14.3" ::
+      Nil,
   scalacOptions ++=
     "-deprecation" ::
-    "-encoding" :: "UTF-8" ::
-    "-feature" ::
-    "-language:existentials" ::
-    "-language:higherKinds" ::
-    "-language:implicitConversions" ::
-    "-language:experimental.macros" ::
-    "-unchecked" ::
-    //"-Xfatal-warnings" :: // kind of brutal in 2.13
-    "-Xlint" ::
-    "-Ywarn-dead-code" ::
-    "-Ywarn-numeric-widen" ::
-    "-Ywarn-value-discard" ::
-    Nil,
+      "-encoding" :: "UTF-8" ::
+      "-feature" ::
+      "-language:existentials" ::
+      "-language:higherKinds" ::
+      "-language:implicitConversions" ::
+      "-language:experimental.macros" ::
+      "-unchecked" ::
+      //"-Xfatal-warnings" :: // kind of brutal in 2.13
+      "-Xlint" ::
+      "-Ywarn-dead-code" ::
+      "-Ywarn-numeric-widen" ::
+      "-Ywarn-value-discard" ::
+      Nil,
   scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, v)) if v <= 12 =>
@@ -58,28 +58,24 @@ lazy val claimantSettings = Seq(
     pushChanges
   ),
   credentials += Credentials(
-    Option(System.getProperty("build.publish.credentials")) map (new File(_)) getOrElse (Path.userHome / ".ivy2" / ".credentials")
+    Option(System.getProperty("build.publish.credentials"))
+      .map(new File(_))
+      .getOrElse(Path.userHome / ".ivy2" / ".credentials")
   ),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
-      Some("Snapshots" at nexus + "content/repositories/snapshots")
+      Some("Snapshots".at(nexus + "content/repositories/snapshots"))
     else
-      Some("Releases" at nexus + "service/local/staging/deploy/maven2")
+      Some("Releases".at(nexus + "service/local/staging/deploy/maven2"))
   },
-  scmInfo := Some(
-    ScmInfo(
-      url("https://github.com/non/claimant"),
-      "scm:git:git@github.com:non/claimant.git")),
+  scmInfo := Some(ScmInfo(url("https://github.com/non/claimant"), "scm:git:git@github.com:non/claimant.git")),
   homepage := Some(url("https://github.com/non/claimant/")),
   licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-  developers := List(
-    Developer("non", "Erik Osheim", "erik@osheim.org", url("http://github.com/non/"))))
+  developers := List(Developer("non", "Erik Osheim", "erik@osheim.org", url("http://github.com/non/")))
+)
 
-lazy val noPublish = Seq(
-  publish := {},
-  publishLocal := {},
-  publishArtifact := false)
+lazy val noPublish = Seq(publish := {}, publishLocal := {}, publishArtifact := false)
 
 lazy val root = project
   .in(file("."))
@@ -94,11 +90,10 @@ lazy val mc = crossProject(JSPlatform, JVMPlatform)
   .in(file("mc"))
   .settings(name := "claimant-mc")
   .settings(claimantSettings: _*)
-  .jsSettings(
-    scalaJSStage in Global := FastOptStage,
-    parallelExecution := false,
-    coverageEnabled := false,
-    jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv())
+  .jsSettings(scalaJSStage in Global := FastOptStage,
+              parallelExecution := false,
+              coverageEnabled := false,
+              jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv())
 
 lazy val mcJVM = mc.jvm
 
@@ -111,11 +106,10 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(name := "claimant")
   .settings(claimantSettings: _*)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
-  .jsSettings(
-    scalaJSStage in Global := FastOptStage,
-    parallelExecution := false,
-    coverageEnabled := false,
-    jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv())
+  .jsSettings(scalaJSStage in Global := FastOptStage,
+              parallelExecution := false,
+              coverageEnabled := false,
+              jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv())
 
 lazy val coreJVM = core.jvm
 

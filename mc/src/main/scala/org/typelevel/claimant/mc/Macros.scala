@@ -14,6 +14,6 @@ object Macros {
   def forVersionMacro[A](c: Context)(curr: c.Expr[A])(for211: c.Expr[A]): c.Expr[A] =
     Properties.versionNumberString match {
       case Scala211() => for211
-      case _ => curr
+      case _          => curr
     }
 }
