@@ -115,7 +115,10 @@ object Render extends RenderInstances {
    * This method produces output suitable for sequences, sets, etc. in
    * terms of a given iterator, as well as a name.
    */
-  def renderIterator[CC[x] <: Iterable[x], A](sb: StringBuilder, name: String, it: Iterator[A], r: Render[A]): StringBuilder = {
+  def renderIterator[CC[x] <: Iterable[x], A](sb: StringBuilder,
+                                              name: String,
+                                              it: Iterator[A],
+                                              r: Render[A]): StringBuilder = {
     sb.append(name).append("(")
     if (it.hasNext) {
       r.renderInto(sb, it.next)
@@ -161,19 +164,18 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
   // which are not accessible to us due to the Cake pattern. they are
   // modified slightly so that we only escape single-quotes (') in
   // characters, not strings.
-  def escapedChar(c: Char): String = {
+  def escapedChar(c: Char): String =
     (c: @switch) match {
-      case '\b' => "\\b"
-      case '\t' => "\\t"
-      case '\n' => "\\n"
-      case '\f' => "\\f"
-      case '\r' => "\\r"
-      case '"'  => "\\\""
-      case '\\' => "\\\\"
+      case '\b'               => "\\b"
+      case '\t'               => "\\t"
+      case '\n'               => "\\n"
+      case '\f'               => "\\f"
+      case '\r'               => "\\r"
+      case '"'                => "\\\""
+      case '\\'               => "\\\\"
       case _ if (c.isControl) => "\\u%04X".format(c.toInt)
-      case _ => String.valueOf(c)
+      case _                  => String.valueOf(c)
     }
-  }
 
   /**
    * Display an escaped representation of the given Char.
@@ -226,7 +228,7 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
   implicit def renderForOption[A](implicit r: Render[A]): Render[Option[A]] =
     Render.instance {
       case (sb, Some(a)) => r.renderInto(sb.append("Some("), a).append(")")
-      case (sb, None) => sb.append("None")
+      case (sb, None)    => sb.append("None")
     }
 
   implicit def renderForLeft[A](implicit ra: Render[A]): Render[Left[A, Nothing]] =
@@ -237,7 +239,7 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
 
   implicit def renderForEither[A, B](implicit ra: Render[A], rb: Render[B]): Render[Either[A, B]] =
     Render.instance {
-      case (sb, Left(a)) => ra.renderInto(sb.append("Left("), a).append(")")
+      case (sb, Left(a))  => ra.renderInto(sb.append("Left("), a).append(")")
       case (sb, Right(b)) => rb.renderInto(sb.append("Right("), b).append(")")
     }
 
@@ -246,9 +248,11 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
       Render.renderIterator(sb, name, cc.iterator, r)
   }
 
-  class RenderIterableMap[M[k, v] <: Iterable[(k, v)], K, V](name: String)(implicit rk: Render[K], rv: Render[V]) extends Render[M[K, V]] {
-    val rkv: Render[(K, V)] = Render.instance { case (sb, (k, v)) =>
-      rv.renderInto(rk.renderInto(sb, k).append(" -> "), v)
+  class RenderIterableMap[M[k, v] <: Iterable[(k, v)], K, V](name: String)(implicit rk: Render[K], rv: Render[V])
+      extends Render[M[K, V]] {
+    val rkv: Render[(K, V)] = Render.instance {
+      case (sb, (k, v)) =>
+        rv.renderInto(rk.renderInto(sb, k).append(" -> "), v)
     }
     def renderInto(sb: StringBuilder, m: M[K, V]): StringBuilder =
       Render.renderIterator(sb, name, m.iterator, rkv)
@@ -277,7 +281,7 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
   implicit def renderForStream[A: Render]: Render[Stream[A]] =
     Render.instance {
       case (sb, Stream.Empty) => sb.append("Stream()")
-      case (sb, a #:: _) => Render[A].renderInto(sb.append("Stream("), a).append(", ?)")
+      case (sb, a #:: _)      => Render[A].renderInto(sb.append("Stream("), a).append(", ?)")
     }
 
   // sets
@@ -306,8 +310,9 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
 
   implicit def renderForIntMap[V](implicit rv: Render[V]): Render[sci.IntMap[V]] =
     new Render[sci.IntMap[V]] {
-      val rnv: Render[(Int, V)] = Render.instance { case (sb, (n, v)) =>
-        rv.renderInto(sb.append(s"$n -> "), v)
+      val rnv: Render[(Int, V)] = Render.instance {
+        case (sb, (n, v)) =>
+          rv.renderInto(sb.append(s"$n -> "), v)
       }
       def renderInto(sb: StringBuilder, m: sci.IntMap[V]): StringBuilder =
         Render.renderIterator(sb, "IntMap", m.iterator, rnv)
@@ -315,8 +320,9 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
 
   implicit def renderForLongMap[V](implicit rv: Render[V]): Render[sci.LongMap[V]] =
     new Render[sci.LongMap[V]] {
-      val rnv: Render[(Long, V)] = Render.instance { case (sb, (n, v)) =>
-        rv.renderInto(sb.append(s"$n -> "), v)
+      val rnv: Render[(Long, V)] = Render.instance {
+        case (sb, (n, v)) =>
+          rv.renderInto(sb.append(s"$n -> "), v)
       }
       def renderInto(sb: StringBuilder, m: sci.LongMap[V]): StringBuilder =
         Render.renderIterator(sb, "LongMap", m.iterator, rnv)

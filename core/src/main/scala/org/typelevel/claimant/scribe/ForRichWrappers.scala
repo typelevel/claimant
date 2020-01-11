@@ -26,17 +26,13 @@ abstract class ForRichWrappers extends Scribe {
 
 object ForRichWrappers {
 
-  val ints: Set[String] = Set(
-    "scala.Predef.byteWrapper",
-    "scala.Predef.shortWrapper",
-    "scala.Predef.intWrapper",
-    "scala.Predef.longWrapper")
+  val ints: Set[String] =
+    Set("scala.Predef.byteWrapper", "scala.Predef.shortWrapper", "scala.Predef.intWrapper", "scala.Predef.longWrapper")
 
-  val ints211: Set[String] = Set(
-    "scala.this.Predef.byteWrapper",
-    "scala.this.Predef.shortWrapper",
-    "scala.this.Predef.intWrapper",
-    "scala.this.Predef.longWrapper")
+  val ints211: Set[String] = Set("scala.this.Predef.byteWrapper",
+                                 "scala.this.Predef.shortWrapper",
+                                 "scala.this.Predef.intWrapper",
+                                 "scala.this.Predef.longWrapper")
 
   object ForIntWrapper extends ForRichWrappers {
     val wrappers: Set[String] = mc.Macros.forVersion(ints)(ints211)
@@ -44,13 +40,9 @@ object ForRichWrappers {
     val binops: Set[String] = Set("max", "min")
   }
 
-  val floats: Set[String] = Set(
-    "scala.Predef.floatWrapper",
-    "scala.Predef.doubleWrapper")
+  val floats: Set[String] = Set("scala.Predef.floatWrapper", "scala.Predef.doubleWrapper")
 
-  val floats211: Set[String] = Set(
-    "scala.this.Predef.floatWrapper",
-    "scala.this.Predef.doubleWrapper")
+  val floats211: Set[String] = Set("scala.this.Predef.floatWrapper", "scala.this.Predef.doubleWrapper")
 
   object ForFloatWrapper extends ForRichWrappers {
     val wrappers: Set[String] = mc.Macros.forVersion(floats)(floats211)

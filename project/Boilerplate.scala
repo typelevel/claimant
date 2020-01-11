@@ -143,18 +143,20 @@ object Boilerplate {
               import tv._
               def content = {
                 val sb = new StringBuilder
-                sb.append(s"implicit def renderForTuple${arity}[${`A..N`}](implicit ${constraints("Render")}): Render[${`(A..N)`}] =" + "\n")
+                sb.append(
+                  s"implicit def renderForTuple${arity}[${`A..N`}](implicit ${constraints("Render")}): Render[${`(A..N)`}] =" + "\n"
+                )
                 sb.append(s"  Render.instance { case (sb, ${`(a..n)`}) =>" + "\n")
-                sb.append( "    sb.append(\"(\")" + "\n")
+                sb.append("    sb.append(\"(\")" + "\n")
                 sb.append(s"    A0.renderInto(sb, a0)" + "\n")
                 var i = 1
                 while (i < arity) {
                   val (st, sv) = (tv.synTypes(i), tv.synVals(i))
-                  sb.append( "    sb.append(\", \")" + "\n")
+                  sb.append("    sb.append(\", \")" + "\n")
                   sb.append(s"    $st.renderInto(sb, $sv)" + "\n")
                   i += 1
                 }
-                sb.append( "    sb.append(\")\")" + "\n")
+                sb.append("    sb.append(\")\")" + "\n")
                 sb.append(s"  }" + "\n\n")
                 sb.toString
               }

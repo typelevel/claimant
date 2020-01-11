@@ -47,7 +47,8 @@ object Format {
   }
 
   // shape: o.method(x, y)
-  def str1_2(c: Context, sys: System)(o: c.Tree, method: String, x: c.Tree, y: c.Tree, value: Option[c.Tree]): c.Tree = {
+  def str1_2(c: Context,
+             sys: System)(o: c.Tree, method: String, x: c.Tree, y: c.Tree, value: Option[c.Tree]): c.Tree = {
     import c.universe._
     val so = sys.tostr(c)(o)
     val sx = sys.tostr(c)(x)

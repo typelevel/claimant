@@ -43,7 +43,7 @@ abstract class System { sys =>
         case tinker :: rest =>
           tinker.deconstruct(c)(e0, sys) match {
             case Some(e1) => e1
-            case None => loop(rest)
+            case None     => loop(rest)
           }
       }
     loop(tinkers)
@@ -64,7 +64,7 @@ abstract class System { sys =>
         case scribe :: rest =>
           scribe.annotate(c)(input, sys) match {
             case Some(t) => t
-            case None => loop(rest)
+            case None    => loop(rest)
           }
       }
     loop(scribes)

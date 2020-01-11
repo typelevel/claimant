@@ -10,13 +10,30 @@ object ForAdHoc extends Tinker {
 
   val binops =
     Set(
-      "$eq$eq", "$bang$eq", "eq", "ne", "equals",
-      "$less", "$greater", "$less$eq", "$greater$eq",
-      "startsWith", "endsWith", "contains", "containsSlice", "apply",
-      "isDefinedAt", "sameElements", "subsetOf",
-      "exists", "forall",
-      "min", "max", "pmin", "pmax")
-
+      "$eq$eq",
+      "$bang$eq",
+      "eq",
+      "ne",
+      "equals",
+      "$less",
+      "$greater",
+      "$less$eq",
+      "$greater$eq",
+      "startsWith",
+      "endsWith",
+      "contains",
+      "containsSlice",
+      "apply",
+      "isDefinedAt",
+      "sameElements",
+      "subsetOf",
+      "exists",
+      "forall",
+      "min",
+      "max",
+      "pmin",
+      "pmax"
+    )
 
   def deconstruct(c: Context)(e0: c.Expr[Boolean], sys: System): Option[c.Expr[Claim]] = {
     import c.universe._
@@ -33,14 +50,14 @@ object ForAdHoc extends Tinker {
       val xx = sys.annotate(c)(x)
       val yy = sys.annotate(c)(y)
       val label: c.Tree = meth.toString match {
-        case "$eq$eq" => Format.str2(c, sys)(xx, "==", yy, None)
+        case "$eq$eq"   => Format.str2(c, sys)(xx, "==", yy, None)
         case "$bang$eq" => Format.str2(c, sys)(xx, "!=", yy, None)
-        case "eq" => Format.str2(c, sys)(xx, "eq", yy, None)
-        case "ne" => Format.str2(c, sys)(xx, "ne", yy, None)
+        case "eq"       => Format.str2(c, sys)(xx, "eq", yy, None)
+        case "ne"       => Format.str2(c, sys)(xx, "ne", yy, None)
 
-        case "$less" => Format.str2(c, sys)(xx, "<", yy, None)
-        case "$less$eq" => Format.str2(c, sys)(xx, "<=", yy, None)
-        case "$greater" => Format.str2(c, sys)(xx, ">", yy, None)
+        case "$less"       => Format.str2(c, sys)(xx, "<", yy, None)
+        case "$less$eq"    => Format.str2(c, sys)(xx, "<=", yy, None)
+        case "$greater"    => Format.str2(c, sys)(xx, ">", yy, None)
         case "$greater$eq" => Format.str2(c, sys)(xx, ">=", yy, None)
 
         case "exists" | "forall" =>

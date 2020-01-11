@@ -6,7 +6,7 @@ import org.scalacheck.{Prop, Properties}
 // per https://github.com/typelevel/claimant/issues/22
 
 object AnonymousFnTest extends Properties("EnrichmentTest") {
-  val xs = List(1,2,3,4)
+  val xs = List(1, 2, 3, 4)
 
   // property("works on 2.12+, fails to compile on 2.11") =
   //   Claim(xs.flatMap(x => List(x).filter(_ => false)) == Nil)
@@ -21,6 +21,5 @@ object AnonymousFnTest extends Properties("EnrichmentTest") {
     Claim(xs.flatMap(x => List(x).filter(p)) == Nil)
   }
 
-  property("explicit props are fine on 2.11+") =
-    Prop(xs.flatMap(x => List(x).filter(_ => false)) == Nil)
+  property("explicit props are fine on 2.11+") = Prop(xs.flatMap(x => List(x).filter(_ => false)) == Nil)
 }
