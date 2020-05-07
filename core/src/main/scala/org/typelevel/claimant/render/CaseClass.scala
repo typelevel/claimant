@@ -14,11 +14,11 @@ object CaseClass {
       sym.name.decodedName.toString.startsWith("Tuple") &&
         sym.owner == typeOf[Any].typeSymbol.owner
 
-    if (!A.typeSymbol.asClass.isCaseClass) {
+    if (!A.typeSymbol.asClass.isCaseClass)
       c.abort(c.enclosingPosition, "Not a case class!")
-    } else if (A.baseClasses.exists(isTuple)) {
+    else if (A.baseClasses.exists(isTuple))
       c.abort(c.enclosingPosition, "Not needed for tuples!")
-    } else {
+    else {
       val name = A.typeSymbol.name.toString
       val fields = A.decls.collect { case m: MethodSymbol if m.isCaseAccessor => m }
 

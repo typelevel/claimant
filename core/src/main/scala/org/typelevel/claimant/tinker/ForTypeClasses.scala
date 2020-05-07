@@ -12,7 +12,8 @@ object ForTypeClasses extends Tinker {
         "lt" -> Some("<"),
         "lteqv" -> Some("<="),
         "gt" -> Some(">"),
-        "gteqv" -> Some(">="))
+        "gteqv" -> Some(">=")
+    )
 
   def deconstruct(c: Context)(e0: c.Expr[Boolean], sys: System): Option[c.Expr[Claim]] = {
     import c.universe._

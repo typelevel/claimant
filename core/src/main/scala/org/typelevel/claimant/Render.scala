@@ -118,7 +118,8 @@ object Render extends RenderInstances {
   def renderIterator[CC[x] <: Iterable[x], A](sb: StringBuilder,
                                               name: String,
                                               it: Iterator[A],
-                                              r: Render[A]): StringBuilder = {
+                                              r: Render[A]
+  ): StringBuilder = {
     sb.append(name).append("(")
     if (it.hasNext) {
       r.renderInto(sb, it.next)
@@ -166,15 +167,15 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
   // characters, not strings.
   def escapedChar(c: Char): String =
     (c: @switch) match {
-      case '\b'               => "\\b"
-      case '\t'               => "\\t"
-      case '\n'               => "\\n"
-      case '\f'               => "\\f"
-      case '\r'               => "\\r"
-      case '"'                => "\\\""
-      case '\\'               => "\\\\"
-      case _ if (c.isControl) => "\\u%04X".format(c.toInt)
-      case _                  => String.valueOf(c)
+      case '\b'             => "\\b"
+      case '\t'             => "\\t"
+      case '\n'             => "\\n"
+      case '\f'             => "\\f"
+      case '\r'             => "\\r"
+      case '"'              => "\\\""
+      case '\\'             => "\\\\"
+      case _ if c.isControl => "\\u%04X".format(c.toInt)
+      case _                => String.valueOf(c)
     }
 
   /**
@@ -183,9 +184,9 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
    * Will return a value surrounded by single-quotes.
    */
   def escape(c: Char): String =
-    if (c == '\'') {
+    if (c == '\'')
       "'\\''"
-    } else {
+    else {
       val sb = new StringBuilder
       sb.append("'")
       sb.append(escapedChar(c))
