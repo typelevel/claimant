@@ -32,7 +32,8 @@ object ForRichWrappers {
   val ints211: Set[String] = Set("scala.this.Predef.byteWrapper",
                                  "scala.this.Predef.shortWrapper",
                                  "scala.this.Predef.intWrapper",
-                                 "scala.this.Predef.longWrapper")
+                                 "scala.this.Predef.longWrapper"
+  )
 
   object ForIntWrapper extends ForRichWrappers {
     val wrappers: Set[String] = mc.Macros.forVersion(ints)(ints211)

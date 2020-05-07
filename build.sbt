@@ -93,7 +93,8 @@ lazy val mc = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(scalaJSStage in Global := FastOptStage,
               parallelExecution := false,
               coverageEnabled := false,
-              jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv())
+              jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv()
+  )
 
 lazy val mcJVM = mc.jvm
 
@@ -109,7 +110,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(scalaJSStage in Global := FastOptStage,
               parallelExecution := false,
               coverageEnabled := false,
-              jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv())
+              jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv()
+  )
 
 lazy val coreJVM = core.jvm
 
