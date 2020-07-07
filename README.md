@@ -21,7 +21,7 @@ property fails, ScalaCheck will show you this label.
 
 ### Quick Start
 
-Claimant supports Scala 2.11, 2.12, and 2.13.0-RC1 -- it is available
+Claimant supports Scala 2.11, 2.12, and 2.13. It is available
 from Sonatype.
 
 To include Claimant in your projects, you can use the following
@@ -289,7 +289,7 @@ obscure the underlying values.
 To measure code coverage for 2.12, do the following:
 
 ```
-$ sbt '++ 2.12.6' coreJVM/clean coverage coreJVM/test coverageReport
+$ sbt '++ 2.12.11' coreJVM/clean coverage coreJVM/test coverageReport
 ```
 
 Assuming everything works, the result should end up someplace like:
