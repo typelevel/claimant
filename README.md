@@ -27,16 +27,14 @@ from Sonatype.
 To include Claimant in your projects, you can use the following
 `build.sbt` snippet:
 
-```scala
-libraryDependencies += "org.typelevel" %% "claimant" % "0.1.0"
-```
+`libraryDependencies += "org.typelevel" %% "claimant" %` ![tag-badge][]
 
 Claimant also supports Scala.js. To use Claimant in your Scala.js
 projects, include the following `build.sbt` snippet:
 
-```scala
-libraryDependencies += "org.typelevel" %%% "claimant" % "0.1.0"
-```
+`libraryDependencies += "org.typelevel" %%% "claimant" %` ![tag-badge][]
+
+[tag-badge]: https://img.shields.io/github/v/tag/typelevel/claimant.svg
 
 **Please note** that Claimant is still a very young project. While we
 will try to keep basic source compatibility around the `Claim(...)`
