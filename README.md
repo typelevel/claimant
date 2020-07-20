@@ -289,7 +289,7 @@ obscure the underlying values.
 To measure code coverage for 2.12, do the following:
 
 ```
-$ sbt '++ 2.12.11' coreJVM/clean coverage coreJVM/test coverageReport
+$ sbt '++ 2.12.12' coreJVM/clean coverage coreJVM/test coverageReport
 ```
 
 Assuming everything works, the result should end up someplace like:
