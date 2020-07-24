@@ -21,7 +21,7 @@ object RenderTest extends Properties("RenderTest") {
   test(Array(Array(3, 4), Array(5, 6)), "Array(Array(3, 4), Array(5, 6))")
   test(false, "false")
   test((), "()")
-  test('bravo, "'bravo")
+  test(Symbol("bravo"), Symbol("bravo").toString) // Symbol#toString changed in Scala 2.13.3
   test(Iterable(true, false), "Iterable(true, false)")
   test(Seq(1, 2), "Seq(1, 2)")
   test(IndexedSeq(1, 2, 3), "IndexedSeq(1, 2, 3)")
