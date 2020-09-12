@@ -97,10 +97,9 @@ object Boilerplate {
     def tupleNHeader = s"Tuple${synTypes.size}"
 
     def binMethod(name: String) =
-      synTypes.zipWithIndex.iterator.map {
-        case (tpe, i) =>
-          val j = i + 1
-          s"${tpe}.${name}(x._${j}, y._${j})"
+      synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
+        val j = i + 1
+        s"${tpe}.${name}(x._${j}, y._${j})"
       }
 
     def binTuple(name: String) =
@@ -112,9 +111,8 @@ object Boilerplate {
     }
 
     def unaryMethod(name: String) =
-      synTypes.zipWithIndex.iterator.map {
-        case (tpe, i) =>
-          s"$tpe.$name(x._${i + 1})"
+      synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
+        s"$tpe.$name(x._${i + 1})"
       }
 
     def nullaryTuple(name: String) = {

@@ -251,9 +251,8 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
 
   class RenderIterableMap[M[k, v] <: Iterable[(k, v)], K, V](name: String)(implicit rk: Render[K], rv: Render[V])
       extends Render[M[K, V]] {
-    val rkv: Render[(K, V)] = Render.instance {
-      case (sb, (k, v)) =>
-        rv.renderInto(rk.renderInto(sb, k).append(" -> "), v)
+    val rkv: Render[(K, V)] = Render.instance { case (sb, (k, v)) =>
+      rv.renderInto(rk.renderInto(sb, k).append(" -> "), v)
     }
     def renderInto(sb: StringBuilder, m: M[K, V]): StringBuilder =
       Render.renderIterator(sb, name, m.iterator, rkv)
@@ -311,9 +310,8 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
 
   implicit def renderForIntMap[V](implicit rv: Render[V]): Render[sci.IntMap[V]] =
     new Render[sci.IntMap[V]] {
-      val rnv: Render[(Int, V)] = Render.instance {
-        case (sb, (n, v)) =>
-          rv.renderInto(sb.append(s"$n -> "), v)
+      val rnv: Render[(Int, V)] = Render.instance { case (sb, (n, v)) =>
+        rv.renderInto(sb.append(s"$n -> "), v)
       }
       def renderInto(sb: StringBuilder, m: sci.IntMap[V]): StringBuilder =
         Render.renderIterator(sb, "IntMap", m.iterator, rnv)
@@ -321,9 +319,8 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
 
   implicit def renderForLongMap[V](implicit rv: Render[V]): Render[sci.LongMap[V]] =
     new Render[sci.LongMap[V]] {
-      val rnv: Render[(Long, V)] = Render.instance {
-        case (sb, (n, v)) =>
-          rv.renderInto(sb.append(s"$n -> "), v)
+      val rnv: Render[(Long, V)] = Render.instance { case (sb, (n, v)) =>
+        rv.renderInto(sb.append(s"$n -> "), v)
       }
       def renderInto(sb: StringBuilder, m: sci.LongMap[V]): StringBuilder =
         Render.renderIterator(sb, "LongMap", m.iterator, rnv)
