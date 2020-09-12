@@ -22,17 +22,15 @@ object CaseClass {
       val name = A.typeSymbol.name.toString
       val fields = A.decls.collect { case m: MethodSymbol if m.isCaseAccessor => m }
 
-      val evs = fields.zipWithIndex.map {
-        case (m, i) =>
-          val ev = TermName(s"ev$i")
-          q"private val $ev = _root_.org.typelevel.claimant.Render[${m.returnType}]"
+      val evs = fields.zipWithIndex.map { case (m, i) =>
+        val ev = TermName(s"ev$i")
+        q"private val $ev = _root_.org.typelevel.claimant.Render[${m.returnType}]"
       }
 
-      val stmts = fields.zipWithIndex.flatMap {
-        case (m, i) =>
-          val ev = TermName(s"ev$i")
-          val stmt = q"$ev.renderInto(sb, a.${m.name})"
-          if (i > 0) q"""sb.append(", ")""" :: stmt :: Nil else stmt :: Nil
+      val stmts = fields.zipWithIndex.flatMap { case (m, i) =>
+        val ev = TermName(s"ev$i")
+        val stmt = q"$ev.renderInto(sb, a.${m.name})"
+        if (i > 0) q"""sb.append(", ")""" :: stmt :: Nil else stmt :: Nil
       }
 
       c.Expr(q"""
