@@ -7,7 +7,7 @@ lazy val claimantSettings = Seq(
   crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.3"),
   libraryDependencies ++=
     "org.scala-lang" % "scala-reflect" % scalaVersion.value ::
-      "org.scalacheck" %%% "scalacheck" % "1.15.0" ::
+      "org.scalacheck" %%% "scalacheck" % "1.15.1" ::
       Nil,
   scalacOptions ++=
     "-deprecation" ::
