@@ -4,7 +4,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 lazy val claimantSettings = Seq(
   organization := "org.typelevel",
   scalaVersion := "2.12.12",
-  crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.3"),
+  crossScalaVersions := Seq("2.13.5", "2.12.12", "2.13.3"),
   libraryDependencies ++=
     "org.scala-lang" % "scala-reflect" % scalaVersion.value ::
       "org.scalacheck" %%% "scalacheck" % "1.15.2" ::
