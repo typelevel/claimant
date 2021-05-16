@@ -4,7 +4,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 lazy val claimantSettings = Seq(
   organization := "org.typelevel",
   scalaVersion := "2.12.13",
-  crossScalaVersions := Seq("2.11.12", "2.12.13", "2.13.3"),
+  crossScalaVersions := Seq("2.11.12", "2.12.13", "2.13.4"),
   libraryDependencies ++=
     "org.scala-lang" % "scala-reflect" % scalaVersion.value ::
       "org.scalacheck" %%% "scalacheck" % "1.15.2" ::
@@ -82,10 +82,10 @@ lazy val root = project
   .settings(name := "root")
   .settings(claimantSettings: _*)
   .settings(noPublish: _*)
-  .aggregate(mcJVM, mcJS, coreJVM, coreJS)
-  .dependsOn(mcJVM, mcJS, coreJVM, coreJS)
+  .aggregate(mcJVM, mcJS, mcNative, coreJVM, coreJS, coreNative)
+  .dependsOn(mcJVM, mcJS, mcNative, coreJVM, coreJS, coreNative)
 
-lazy val mc = crossProject(JSPlatform, JVMPlatform)
+lazy val mc = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("mc"))
   .settings(name := "claimant-mc")
@@ -100,7 +100,9 @@ lazy val mcJVM = mc.jvm
 
 lazy val mcJS = mc.js
 
-lazy val core = crossProject(JSPlatform, JVMPlatform)
+lazy val mcNative = mc.native
+
+lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
   .dependsOn(mc)
@@ -116,3 +118,5 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
 lazy val coreJVM = core.jvm
 
 lazy val coreJS = core.js
+
+lazy val coreNative = core.native
