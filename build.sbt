@@ -1,10 +1,11 @@
 import ReleaseTransformations._
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
+ThisBuild / scalaVersion := "2.12.13"
+ThisBuild / crossScalaVersions := Seq("2.11.12", "2.12.13", "2.13.4")
+
 lazy val claimantSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.12.13",
-  crossScalaVersions := Seq("2.11.12", "2.12.13", "2.13.4"),
   libraryDependencies ++=
     "org.scala-lang" % "scala-reflect" % scalaVersion.value ::
       "org.scalacheck" %%% "scalacheck" % "1.15.2" ::
@@ -75,6 +76,10 @@ lazy val claimantSettings = Seq(
   developers := List(Developer("non", "Erik Osheim", "erik@osheim.org", url("http://github.com/non/")))
 )
 
+lazy val nativeSettings = Seq(
+  crossScalaVersions := Seq("2.12.13", "2.13.4")
+)
+
 lazy val noPublish = Seq(publish := {}, publishLocal := {}, publishArtifact := false)
 
 lazy val root = project
@@ -95,6 +100,7 @@ lazy val mc = crossProject(JSPlatform, JVMPlatform, NativePlatform)
               coverageEnabled := false,
               jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv()
   )
+  .nativeSettings(nativeSettings: _*)
 
 lazy val mcJVM = mc.jvm
 
@@ -114,6 +120,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
               coverageEnabled := false,
               jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv()
   )
+  .nativeSettings(nativeSettings: _*)
 
 lazy val coreJVM = core.jvm
 
