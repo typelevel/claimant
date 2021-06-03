@@ -16,6 +16,7 @@ This library is not maintained any longer and will not be ported to Scala 3.
 Please consider switching to:
 
 * [expecty](https://github.com/eed3si9n/expecty/)
+* [MUnit clue](https://scalameta.org/munit/docs/assertions.html)
 * [verify](https://github.com/scala/nanotest-strawman/)
 
 ### Overview
