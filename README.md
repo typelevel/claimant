@@ -8,6 +8,17 @@
 | M E E T S |
 ```
 
+### Deprecation
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+This library is not maintained any longer and will not be ported to Scala 3.
+Please consider switching to:
+
+* [expecty](https://github.com/eed3si9n/expecty/)
+* [MUnit clue](https://scalameta.org/munit/docs/assertions.html)
+* [verify](https://github.com/scala/nanotest-strawman/)
+
 ### Overview
 
 By default, when a ScalaCheck property fails, you'll see its inputs
