@@ -19,7 +19,7 @@ lazy val claimantSettings = Seq(
       "-language:implicitConversions" ::
       "-language:experimental.macros" ::
       "-unchecked" ::
-      //"-Xfatal-warnings" :: // kind of brutal in 2.13
+      // "-Xfatal-warnings" :: // kind of brutal in 2.13
       "-Xlint" ::
       "-Ywarn-dead-code" ::
       "-Ywarn-numeric-widen" ::

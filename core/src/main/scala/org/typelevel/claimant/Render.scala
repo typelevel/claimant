@@ -7,38 +7,27 @@ import scala.collection.{immutable => sci}
 import scala.collection.{mutable => scm}
 
 /**
- * Render is a typeclass to provide human-readable representations of
- * values.
+ * Render is a typeclass to provide human-readable representations of values.
  *
- * This typeclass provides two major concrete benefits over the
- * built-in toString method:
+ * This typeclass provides two major concrete benefits over the built-in toString method:
  *
- *     1. We get better representations of some built-in types. For
- *        example, Strings are quoted, Arrays are handled like other
- *        collections, and so on.
+ *   1. We get better representations of some built-in types. For example, Strings are quoted, Arrays are handled like
+ *      other collections, and so on.
  *
- *     2. Authors can override representations locally to improve
- *        error reporting in their own tests.
+ * 2. Authors can override representations locally to improve error reporting in their own tests.
  *
- * Claimant attempts to provide instances for most built-in Scala
- * types, as well as a handy macro for generating instances for Scala
- * case classes. For example, the following code produces a
- * Render[Rectangle] value, which will use Render[Double] instances
- * recursively:
+ * Claimant attempts to provide instances for most built-in Scala types, as well as a handy macro for generating
+ * instances for Scala case classes. For example, the following code produces a Render[Rectangle] value, which will use
+ * Render[Double] instances recursively:
  *
- *     case class Rectangle(height: Double, width: Double)
+ * case class Rectangle(height: Double, width: Double)
  *
- *     object Rectangle {
- *       implicit renderForRectangle: Render[Rectangle] =
- *         Render.caseClass[Rectangle]
- *     }
+ * object Rectangle { implicit renderForRectangle: Render[Rectangle] = Render.caseClass[Rectangle] }
  *
- * This typeclass is very similar to cats.Show (and probably others).
- * One major design difference is that for a given type T, if a
- * specific Render[T] is not available, this typeclass will generate
- * an instance that just uses .toString. This behavior is intended to
- * balance the benefits of custom representations with not requiring
- * authors to write a bunch of new code in order ot use Claimant.
+ * This typeclass is very similar to cats.Show (and probably others). One major design difference is that for a given
+ * type T, if a specific Render[T] is not available, this typeclass will generate an instance that just uses .toString.
+ * This behavior is intended to balance the benefits of custom representations with not requiring authors to write a
+ * bunch of new code in order ot use Claimant.
  */
 trait Render[A] {
 
@@ -49,11 +38,9 @@ trait Render[A] {
     renderInto(new StringBuilder(), a).toString
 
   /**
-   * Write a representation of `a` into an existing mutable
-   * StringBuilder.
+   * Write a representation of `a` into an existing mutable StringBuilder.
    *
-   * This method is used to power `render`, as well as used
-   * recursively when building up larger representations.
+   * This method is used to power `render`, as well as used recursively when building up larger representations.
    */
   def renderInto(sb: StringBuilder, a: A): StringBuilder
 }
@@ -66,34 +53,29 @@ object Render extends RenderInstances {
   def apply[A](implicit ev: Render[A]): Render[A] = ev
 
   /**
-   * Method for rendering a given value, using an implicitly-available
-   * Render[A] instance.
+   * Method for rendering a given value, using an implicitly-available Render[A] instance.
    */
   def render[A](a: A)(implicit ev: Render[A]): String = ev.render(a)
 
   /**
    * Define a Render[A] instance that returns a constant string value.
    *
-   * This method should only be used in cases where there is only one
-   * value for A.
+   * This method should only be used in cases where there is only one value for A.
    */
   def const[A](s: String): Render[A] =
     instance((sb, _) => sb.append(s))
 
   /**
-   * Define a Render[A] instance in terms of a single method to
-   * produce a String.
+   * Define a Render[A] instance in terms of a single method to produce a String.
    *
-   * This method should only be used when we need to take advantage of
-   * an existing method that returns String (for example, using
-   * .toString on a primitive type).
+   * This method should only be used when we need to take advantage of an existing method that returns String (for
+   * example, using .toString on a primitive type).
    */
   def str[A](f: A => String): Render[A] =
     instance((sb, a) => sb.append(f(a)))
 
   /**
-   * Define a Render[A] instance in terms of a provided function for
-   * `renderInto`.
+   * Define a Render[A] instance in terms of a provided function for `renderInto`.
    */
   def instance[A](f: (StringBuilder, A) => StringBuilder): Render[A] =
     new Render[A] {
@@ -103,8 +85,8 @@ object Render extends RenderInstances {
   /**
    * Define a Render[A] instance for a given case class.
    *
-   * This method will recursively use Render instances for every field
-   * value in the case class. It can only be used with case classes.
+   * This method will recursively use Render instances for every field value in the case class. It can only be used with
+   * case classes.
    */
   def caseClass[A]: Render[A] =
     macro CaseClass.impl[A]
@@ -112,8 +94,7 @@ object Render extends RenderInstances {
   /**
    * Method to assist in writing out collections of values.
    *
-   * This method produces output suitable for sequences, sets, etc. in
-   * terms of a given iterator, as well as a name.
+   * This method produces output suitable for sequences, sets, etc. in terms of a given iterator, as well as a name.
    */
   def renderIterator[CC[x] <: Iterable[x], A](sb: StringBuilder,
                                               name: String,
@@ -330,9 +311,8 @@ abstract class RenderInstances extends RenderTupleInstances with LowPriorityRend
 /**
  * Low-priority fallback that uses toString.
  *
- * If a type uses this Render instance, it breaks the ability of
- * Render to recursively display any of its member values, even those
- * that have Render instances.
+ * If a type uses this Render instance, it breaks the ability of Render to recursively display any of its member values,
+ * even those that have Render instances.
  */
 private[claimant] trait LowPriorityRenderInstances {
   implicit def renderAnyRef[A]: Render[A] = Render.str(_.toString)
