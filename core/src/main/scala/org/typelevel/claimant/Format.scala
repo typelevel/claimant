@@ -3,15 +3,12 @@ package org.typelevel.claimant
 import scala.reflect.macros.blackbox.Context
 
 /**
- * Format provides supports building trees of different shapes with
- * quasiquotes.
+ * Format provides supports building trees of different shapes with quasiquotes.
  *
- * The trees don't represent actual expressions, but rather represent
- * String expressions involving concatenation of other Strings and
- * String expressions.
+ * The trees don't represent actual expressions, but rather represent String expressions involving concatenation of
+ * other Strings and String expressions.
  *
- * These methods will also annotate the String with an optional value
- * (representing the result of the expression).
+ * These methods will also annotate the String with an optional value (representing the result of the expression).
  */
 object Format {
 
