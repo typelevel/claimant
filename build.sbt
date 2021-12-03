@@ -36,13 +36,13 @@ lazy val claimantSettings = Seq(
   // HACK: without these lines, the console is basically unusable,
   // since all imports are reported as being unused (and then become
   // fatal errors).
-  scalacOptions in (Compile, console) ~= { _.filterNot("-Xlint" == _) },
-  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
+  Compile / console / scalacOptions ~= { _.filterNot("-Xlint" == _) },
+  Test / console / scalacOptions := (Compile / console / scalacOptions).value,
   // release stuff
   releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   pomIncludeRepository := Function.const(false),
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
@@ -91,7 +91,7 @@ lazy val mc = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("mc"))
   .settings(name := "claimant-mc")
   .settings(claimantSettings: _*)
-  .jsSettings(scalaJSStage in Global := FastOptStage,
+  .jsSettings(Global / scalaJSStage := FastOptStage,
               parallelExecution := false,
               coverageEnabled := false,
               jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv()
@@ -109,8 +109,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .dependsOn(mc)
   .settings(name := "claimant")
   .settings(claimantSettings: _*)
-  .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
-  .jsSettings(scalaJSStage in Global := FastOptStage,
+  .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
+  .jsSettings(Global / scalaJSStage := FastOptStage,
               parallelExecution := false,
               coverageEnabled := false,
               jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv()
