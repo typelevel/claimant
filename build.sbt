@@ -1,8 +1,8 @@
 import ReleaseTransformations._
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-ThisBuild / scalaVersion := "2.12.15"
-ThisBuild / crossScalaVersions := Seq("2.12.15", "2.13.8")
+ThisBuild / scalaVersion := "2.12.16"
+ThisBuild / crossScalaVersions := Seq("2.12.16", "2.13.8")
 
 lazy val claimantSettings = Seq(
   organization := "org.typelevel",
